@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>{%block title%}No Internet Connection{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='css/bootstrap.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='font/css/all.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='JQanimate.css')}}">
+        <link rel="icon" href="{{url_for('bpuser.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
+
+		<style type="text/css">
+            
+            .container-fluid{
+                min-height:534px;
+                background-image: url("{{url_for('bpuser.static',filename='images/bad_network.png')}}");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: contain;
+            }
+        </style>
+    </head>
+    <body style='background-color:#FFF4C2'>
+        <div class="container-fluid">
+            <div class="row">
+                
+                <div class="col">
+                    <h1 style="font-family:'lucida-calligraphy';">Tastebuds</h1>
+                </div>
+            </div>
+            <div class="row align-items-center"  style="min-height:534px;">
+                
+                <div class="col-6 offset-6 mt-5">
+                    <h6 class="text-center">Oops! Seems like you have lost your internet connection.</h6>
+                    <p class="text-center"> Transaction failed.</p>
+                    <a href="/user/" class='btn text-light float-end' style="background-color:#704e2e;">Home</a>
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>

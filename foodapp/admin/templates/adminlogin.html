@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{%block title%}TasteBuds | Admin Login{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="author" content="Amaechi Tochukwu">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpadmin.static',filename='css/bootstrap.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpadmin.static',filename='font/css/all.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpadmin.static',filename='JQanimate.css')}}">
+
+		<style type="text/css">
+            body{
+                background: linear-gradient( to right, red, orange);
+            }
+
+
+            @media screen and (max-width:375px){
+                
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row mt-5 align-items-center">
+                <div class="col-md-6 offset-md-3 mt-5">
+                    <h2 class="text-light text-center" style="font-family: 'lucida-calligraphy';">Admin Login</h2>
+            
+                    {%set emptyform=get_flashed_messages(category_filter="WrongDetails")%}
+                    {%for i in emptyform%}
+                    <div class="alert alert-danger">{{i}}</div>
+                    {%endfor%}
+            
+                    <div id="loginfeedback"></div>
+                    <form action="/admin/adminverifylogin/" method='post'>
+                        <div class="mb-3">
+                            <label for='email' class="form-label"><b>Email Address</b></label>
+                            <input type='email' class='form-control' name='email' id='email'>
+                        </div>
+                        <div class="mb-3">
+                            <label for='password' class="form-label"><b>Password</b></label>
+                            <input type='password' class='form-control' name='password' id='password'>
+                        </div>
+                        <div class="mb-3">
+                            <input type='hidden' class='form-control' name='csrf_token' id='csrf_token' value="{{csrf_token()}}">
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-success form-control" id="btnLogin" onclick="login(event)">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {%autoescape false%}
+        <script type="text/javascript" src="{{url_for('bpadmin.static',filename='jquery/jquery.min.js')}}"></script>
+
+        {%block scripts%}
+        <script type='text/javascript'>
+            function login(e){
+                var mail=document.getElementById("email").value;
+                var pswd=document.getElementById("password").value;
+                if(mail=="" || pswd==""){
+                    $('#loginfeedback').addClass("alert alert-danger")
+                    $('#loginfeedback').text("Please Fill Out All Fields.")
+                    if(mail!=""){
+                        $('#password').focus()
+                    }
+                    else if(pswd!=""){
+                        $('#email').focus()
+                    }
+                    e.preventDefault();
+                }
+            }
+        </script>
+        {%endblock scripts%}
+        <script type="text/javascript" src="{{url_for('bpadmin.static',filename='js/bootstrap.bundle.js')}}"></script>
+        {%endautoescape%}
+    </body>
+</html>

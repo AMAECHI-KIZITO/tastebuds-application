@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>{%block title%}TasteBuds | Home{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="author" content="Amaechi Tochukwu">
+		<meta name="keywords" content="Affordable Meals in Nigeria, Restaurants in Nigeria, Online food vendors, Online restorants, cheap meals in Nigeria">
+		<meta name="description" content="Buy delicious foods from Tastebuds at great prices.">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='css/bootstrap.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='font/css/all.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='JQanimate.css')}}">
+        <link rel="icon" href="{{url_for('bpuser.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
+
+		<style type="text/css">
+            .topside{
+                background-color:#000;
+            }
+            .topside{
+                min-height:400px;
+                background-image: url("{{url_for("bpuser.static",filename="images/food2.jpg")}}");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: scroll;
+                background-size: cover;
+            }
+            .small{
+                min-height:400px;
+            }
+            .links{
+				text-decoration: none;
+				color: #fff;
+			}
+            .links:hover{
+				color: orange;
+			}
+
+            @media screen and (max-width:375px){
+                #theBrand{
+                    font-size:20px
+                }
+            }
+
+            {%block extra_media_query%}
+            {%endblock%}
+        </style>
+    </head>
+    <body style='background-color:#FFF4C2'>
+        <div class="container-fluid">
+            {%block navigation%}
+            <!--Navigation-->
+            <div class="row" style="position:sticky; top:0px; z-index:5">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-1">
+                    <div class="container-fluid">
+                        <a class="navbar-brand brandname" href="/user/" style="font-family:'lucida-calligraphy'; color: #FFF4C2;"><h3 id='theBrand'>TasteBuds</h3></a>
+                        <button class=" btn btn-sm navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        </button>
+                        
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="/user/" style="color: #FFF4C2;"><b>Home</b></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#" style="color: #FFF4C2;"><b>Contact Us</b></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="/admin/login/" style="color: #FFF4C2;"><b>Admin</b></a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #FFF4C2;"><b>Categories</b>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #FFF4C2;">
+                                        <li><a class="dropdown-item" href="#">Drinks</a></li>
+                                        <li><a class="dropdown-item" href="#">Swallow and Soups</a></li>
+                                        <li><a class="dropdown-item" href="#">Main Course</a></li>
+                                        <li><a class="dropdown-item" href="#">Desserts</a></li>
+                                        <li><a class="dropdown-item" href="#">Proteins</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div>
+                                {%if session.get('customer_name')==None and session.get('customer_id')==None%}
+                                <a href='/user/login/'><i class="fa-solid fa-user pe-2"></i></a>
+                                {%else%}
+                                <a style="color:#FFF4C2; text-decoration:none;">Hi, {{session.get('customer_name')}}</a>
+                                {%endif%}
+
+                                {#{%if session.get('customer_id')==None and session.get('customer_name')==None%}#}
+                                {#<a href="/user/login/"><i class="fa-solid fa-cart-shopping"></i></a>#}
+                                {#{%else%}#}
+
+                                <button type="button" id="shopcart" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#orderPlaced" style="position: relative; background-color:#FFF4C2">
+
+                                    <i class="fa-solid fa-cart-shopping">
+                                        {#{%if session.get('customer_id')==None and session.get('customer_name')==None%}
+                                            <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px"></span>
+                                        {%else%}
+                                            {%if usercart==0%}
+                                            <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px">0</span>
+                                            {%else%}
+                                            <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px">{{usercart}}</span>
+                                            {%endif%}
+                                        {%endif%}#}
+
+
+                                        {%if usercart!=0%}
+                                            <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px">{{usercart}}</span>
+                                        {%endif%}
+                                    </i>
+                                </button>
+                                {#{%endif%}#}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            {%endblock navigation%}
+
+            {%block content%}
+            <!--First part-->
+            <div class='row topside align-items-center'>
+                <div class='col-md-6 d-md-none'>
+                    <div class='row small align-items-center text-center'>
+                        <div class='col pt-5'>
+                            <h2 style="color:#FFF4C2; font-family:'lucida-calligraphy'; background-color:#000">Food: Your Tongue's Best Buddy</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-12 d-none d-md-block'>
+                    <h2 style="color:#FFF4C2; font-family:'lucida-calligraphy'; font-size:55px; background-color:#000" class='d-none d-md-block text-center'>Food: Your Tongue's Best Buddy</h2>
+                </div>
+            </div>
+
+            <!--Popular products-->
+            <div class="row mt-5"  id='restaurant'>
+				<div class="col">
+					<h3 class="ps-3" style="color:#384A62; font-family: 'Times-new-roman';">Explore Our Restaurants</h3>
+				</div>
+			</div>
+            
+            {% set duplicate=get_flashed_messages(category_filter="duplicate_entry")%}
+            {% for x in duplicate %}
+            <div class="alert alert-danger">{{x}}</div>
+            {% endfor %}
+
+            <div class="row mx-auto">
+                {% for rst in rests %}
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-1">
+					<div class="card" style="width: 18rem;">
+  						<img class="card-img-top img-fluid" src="{{url_for('bpuser.static', filename='rest_imgs/'+ rst.rest_img)}}" alt="{{rst.rest_name}} photo">
+  						<div class="card-body">
+    						<h5 class="card-title" style="font-size: 15px;">{{rst.rest_name}}</h5>
+    						<a href="/user/restaurants/{{rst.rest_id}}" class="btn text-light" style="background-color:#704e2e;">View</a>
+  						</div>
+					</div>
+				</div>
+                {% endfor %}
+            </div>
+            {%endblock content%}
+        </div>
+        
+
+        {%block footer%}
+        <!--Footer-->
+        <div class='row align-items-center pt-3' style="background-color:#704e2e; color:#fff">
+            <div class='col-md-5'>
+                <img src="{{url_for('bpuser.static', filename='images/tastebuds.png')}}" class='img-fluid' width="200px" height="200px">
+            </div>
+            <div class='col-md-7'>
+                <div class='row'>
+                    <div class="col-md-3 mb-3">
+                        <h5>Information</h5>
+                        <a href='/user/' class="d-block links">Home</a>
+                        <a href="#" class="d-block links">Categories</a>
+                        <a href='/contact-us/' class="d-block links">Contact Us</a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <h5>Account</h5>
+                        <a href='/user/account/' class="d-block links">Login/Register</a>
+                        <a href='/user/logout/' class="d-block links">Logout</a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <h5>Follow us</h5>
+                        <div class="row">
+                            <div class="col-1">
+                                <a class="d-block links" href='#'><i class="fa-brands fa-facebook-f"></i></a>
+                            </div>
+                            <div class="col-1">
+                                <a class="d-block links" href='#'><i class='fa-brands fa-instagram'></i></a>
+                            </div>
+                            <div class="col-1">
+                                <a class="d-block links" href='#'><i class='fa-brands fa-whatsapp'></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class='row'>
+                <div class='col-12'>
+                    {#<p class='text-center'>Designed and developed by <a href="mailto:thisisamaechi@gmail.com" style="text-decoration:none; color:orange">Amaechi</a></p>#}
+                    <p class='text-center' style='font-size:12px'>&copy; Developed by Amaechi. All rights reserved</p>
+                </div>
+            </div>
+        </div>
+        {%endblock footer%}
+
+
+
+
+        {% block cartModal %}
+        <!--Cart MODAL-->
+		<div class="modal fade" id="orderPlaced" tabindex="-1" aria-labelledby="Tastebuds" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+                <div class="modal-content" id="content_modal">
+                    <div class="modal-header">
+                        <h5 modal-dialog-scrollable id="Tastebuds">Tastebuds Cart</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            {%if usercart!= 0%}
+                            <div class="row">
+                            	<div class="col-12 text-center">
+                            		<h3><b>Products List</b></h3>
+                                    <p>Click the delete icon to remove a particular item.</p>
+                                    <p id='deleteitemFeedback'></p>
+                                    <p id='emptyCartFeedback'></p>
+                            	</div>
+                            </div>
+                            
+                            <div class="row">
+                            	<div class="col-12">
+                            		<form action="/user/checkout/" method="post">
+                                        <div class="row mb-2 d-none d-md-flex">
+                                            <label class='col-md-5'><b>Product Name</b></label>
+                                            
+                                            <div class='col-md-3'>
+                                                <label><b>Amount(&#8358;)</b></label>
+                                            </div>
+                                            <div class='col-md-2'>
+                                                <label><b>Qty</b></label>
+                                            </div>
+                                        </div>
+                                        {%for c in usercartdeets%}
+                                        <div class="row mb-2">
+                                            <label class='col-md-5' style='font-size:14px'>{{c.productinfo.prod_name}}</label>
+                                            
+                                            <div class='col-md-3'>
+                                                <input type='number' class='form-control' value='{{c.amount}}' style="border:none" readonly>
+                                            </div>
+
+                                            <div class='col-md-2'>
+                                                <input type='number' name='adjusted_quantity' class='form-control' min='1' value='{{c.product_qty}}' readonly>
+                                            </div>
+
+                                            <div class='col-md-2 d-none'>
+                                                <input type='hidden' name='discard{{c.temp_cart_id}}' id='discard{{c.temp_cart_id}}' value='{{c.temp_cart_id}}' readonly>
+                                            </div>
+
+                                            <div class='col-md-2'>
+                                                <button type='button' id='removeitem{{c.temp_cart_id}}' class='btn btn-danger btn-sm'><i class='fa-solid fa-trash-can'></i></button>
+                                            </div>
+                                        </div>
+                                        {%endfor%}
+                                        <div>
+                                            <textarea class="form-control" name="shipping_address" id="shipping_address" placeholder="Provide your shipping address"  required></textarea>
+                                        </div>
+                                        <input type='hidden' name='csrf_token' value="{{csrf_token()}}">
+
+                                        <input type='hidden' class='form-control' name='totalamt' value='{{total}}' style="border:none" readonly>
+
+                                        <button type="submit" id='confirmOrder' class="btn text-light form-control mt-4" style='background-color:#704e2e'>Checkout</button>
+                                    </form>
+                            	</div>
+                            </div>
+                            {%else%}
+                            <div>
+                                <h4>Nothing in Cart</h4>
+                            </div>
+                            {%endif%}
+                        </div>
+                    </div>
+                    {%if usercart != 0 %}
+                    <div class="modal-footer">
+                        <div class="row mb-2">
+                            <label class='col-md-5'><b>Total(&#8358;)</b></label>
+                            
+                            <div class='col-md-7'>
+                                <input type='number' class='form-control' value='{{total}}' style="border:none" readonly>
+                            </div>
+                        </div>
+                        <button type='button' class="btn btn-danger btn-sm" id='btnEmptyCart'>Empty Cart</button>
+                    </div>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+        {% endblock cartModal %}
+
+
+        {% block foodProductsModal %}
+        {% endblock foodProductsModal %}
+
+
+
+        {%autoescape false%}
+        <script type="text/javascript" src="{{url_for('bpuser.static',filename='jquery/jquery.min.js')}}"></script>
+        {#<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>#}
+
+        {%block scripts%}
+
+        {% for c in usercartdeets %}
+        <script type='text/javascript'>
+
+            //Remove a temporary cart item ajax
+            $('#removeitem{{c.temp_cart_id}}').click(function(){
+                discardID=$('#discard{{c.temp_cart_id}}').val();
+    
+                var data2send={'trash':discardID}
+    
+    
+                $.ajax({
+                    url:"/user/removeitem/",
+                    data:data2send,
+                    dataType:"text",
+                    type:"get",
+                    beforeSend:function(){},
+                    success:function(rsp){
+                        $('#deleteitemFeedback').addClass('alert alert-success')
+                        $('#deleteitemFeedback').text(rsp)
+                    },  
+                    error:function(errormessage){
+                        console.log(errormessage)
+                    }
+                })
+            })
+        </script>
+        {% endfor %}
+
+        <script type='text/javascript'>
+            // empty temporary cart
+            $('#btnEmptyCart').click(function(){
+                cartuseriD={{session.get('user_cart_id')}}
+    
+                var data2send={'emptycartID':cartuseriD}
+                $.ajax({
+                    url:"/user/emptytemporarycart/",
+                    data:data2send,
+                    dataType:"text",
+                    type:"get",
+                    beforeSend:function(
+                        alert('dddd')
+                    ){},
+                    success:function(rsp){
+                        $('#emptyCartFeedback').addClass('alert alert-success');
+                        $('#emptyCartFeedback').text(rsp);
+                    },  
+                    error:function(errormessage){
+                        console.log(errormessage)
+                    }
+                })
+            })
+        </script>
+
+        {%endblock scripts%}
+        <script type="text/javascript" src="{{url_for('bpuser.static',filename='js/bootstrap.bundle.js')}}"></script>
+        {%endautoescape%}
+    </body>
+</html>

@@ -1,0 +1,47 @@
+{%extends "userindex.html"%}
+
+{%block title%}
+TasteBuds - Order Information
+{%endblock title%}
+
+{%block content%}
+<div class="row pt-3 align-items-center"  style='background-color:#FFF4C2'>
+    <div class="col-md-6 offset-md-3 pb-3">
+        <h2 class="text-center" style="font-family: 'lucida-calligraphy'; color: #704e2e;">Your Order Information</h2><hr>
+
+        <h5>Your Transaction Reference is {{ref}}</h5>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Item</th>
+                    <th>Qty(&#8358;)</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for x in info%}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{x.Ord_details_prod_info.prod_name}}</td>
+                    <td>{{x.prod_qty}}</td>
+                    <td>{{x.amount}}</td>
+                </tr>
+                {%endfor%}
+                <tr>
+                    <td>Total<td>
+                    <td colspan='2'>{{totalamount}}<td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/user/pay_with_flutterwave/" class="btn btn-dark form-control" id='paymentLink'>Pay Now</a>
+    </div>
+</div>
+{%endblock content%}
+
+{%block scripts%}
+<script type='text/javascript'>
+    
+</script>
+{%endblock scripts%}

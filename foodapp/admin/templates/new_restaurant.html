@@ -1,0 +1,70 @@
+{%extends 'adminhome.html'%}
+
+{%block title%}TasteBuds | Admin - New Restaurant{%endblock%}
+{%block content%}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div id="new_rest_Feedback"></div>
+
+        {%set notReg=get_flashed_messages(category_filter='bad_rest_reg')%}
+        {%for i in notReg%}
+        <div class="alert alert-danger">{{i}}</div>
+        {%endfor%}
+
+        {%set goodReg=get_flashed_messages(category_filter='Good_rest_reg')%}
+        {%for x in goodReg%}
+        <div class="alert alert-success">{{x}}</div>
+        {%endfor%}
+
+        <form action="/admin/restaurant/registration/" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="restaurantName" class="form-label text-light">Restaurant Name</label>
+                <input type="text" class="form-control" name='restaurantName' id="restaurantName">
+            </div>
+            <div class="mb-3">
+                <label for="restaurantPhone" class="form-label text-light">Restaurant Phone</label>
+                <input type="text" class="form-control" name='restaurantPhone' id="restaurantPhone">
+            </div>
+            <div class="mb-3">
+                <label for="restaurantEmail" class="form-label text-light">Restaurant Email</label>
+                <input type="text" class="form-control" name='restaurantEmail' id="restaurantEmail">
+            </div>
+            <div class="mb-3">
+                <label for="restaurantAbout" class="form-label text-light">Restaurant About</label>
+                <input type="text" class="form-control" name='restaurantAbout' id="restaurantAbout">
+            </div>
+            <div class="mb-3">
+                <label for="restaurantPic" class="form-label text-light">Restaurant Profile Photo</label>
+                <input type="file" class="form-control" name='restaurantPic' id="restaurantPic">
+            </div>
+            <div class="mb-3">
+                <label for="restaurantAddress" class="form-label text-light">Restaurant Address</label>
+                <textarea class="form-control" name="restaurantAddress" id="restaurantAddress"></textarea>
+            </div>
+            <div class="mb-3">
+                <input type="hidden" class="form-control" name='csrf_token' id="csrf_token" value="{{csrf_token()}}">
+            </div>
+            <button type"button" class="btn btn-warning form-control" id="btnRegRestaurant" onclick="register(event)">Register</button>
+        </form>
+    </div>
+</div>
+{%endblock content%}
+
+{%block scripts%}
+<script type='text/javascript'>
+    function register(e){
+        var image = document.getElementById('restaurantPic').value;
+        var Rname = document.getElementById('restaurantName').value;
+        var Rphone = document.getElementById('restaurantPhone').value;
+        var Remail = document.getElementById('restaurantEmail').value;
+        var Rabout = document.getElementById('restaurantAbout').value;
+        var Raddress = document.getElementById('restaurantAddress').value;
+
+        if(image==""||Rname==""||Rphone==""||Remail==""||Rabout==""||Raddress==""){
+            $('#new_rest_Feedback').addClass('alert alert-danger');
+            $('#new_rest_Feedback').text('Please complete all fields');
+            e.preventDefault();
+        }
+    }
+</script>
+{%endblock scripts%}
