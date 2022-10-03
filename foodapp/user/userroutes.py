@@ -279,17 +279,69 @@ def checkout_temporary_cart():
         return redirect("/user/login/")
 
 
-
-
-
 ## Transaction Outcome
 @userobj.route('/transaction_outcome/')
 def txn_outcome():
     txn_status=request.args.get('status')
     txn_ref=request.args.get('tx_ref')
     txn_id=request.args.get('transaction_id')
-    data=jsonify(status=txn_status, reference=txn_ref, txn_id=txn_id)
-    return data
+    #data=jsonify(status=txn_status, reference=txn_ref, txn_id=txn_id)
+    
+    ##Verify Transaction to the flutterwave API
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization":"Bearer FLWSECK_TEST-97a829830c93ce6fed7d14ade42d7628-X"
+    }
+    response = requests.get( f"https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref={txn_ref}", headers=headers )
+    rsp_json = response.json()
+    
+    txn_date=rsp_json["data"]["created_at"]
+    txn_created=txn_date[0:19]
+    txn_day, timecreated=txn_created.split("T")
+    timecreated=datetime.utcfromtimestamp(timecreated) + timedelta(hours=1)
+    
+    if rsp_json["data"]["status"]=="successful":
+        updateorder=db.session.query(Order).filter(Order.ref_no==txn_ref).first()
+        #get the id
+        updateorderID=updateorder.order_id
+        
+        #update the order status
+        updateorder.payment_status='Paid'
+        
+        #update payment status
+        updatepayment=db.session.query(Payment).filter(Payment.pay_ref==txn_ref, Payment.pay_orderid==updateorderID).first()
+        updatepayment.pay_status="Paid"
+        updatepayment.pay_feedback=rsp_json["data"]["processor_response"]
+        
+        #updating order details
+        updateorderdetails=db.session.query(Order_details).filter(Order_details.order_id==updateorderID).all()
+        for details in updateorderdetails:
+            details.payment_status="Paid"
+        db.session.commit()
+        
+        return render_template("transaction_outcome.html", customer=rsp_json['data']['customer']['name'], amount=rsp_json['data']['charged_amount'], trn_ref=txn_ref, currency=rsp_json['data']['currency'], date_of_txn=rsp_json['data']['charged_amount'], day_of_txn=txn_day, time_of_txn=timecreated)
+    else:
+        updateorder=db.session.query(Order).filter(Order.ref_no==txn_ref).first()
+        #get the id
+        updateorderID=updateorder.order_id
+        
+        #update the order status
+        updateorder.payment_status='Failed'
+        
+        #update payment status
+        updatepayment=db.session.query(Payment).filter(Payment.pay_ref==txn_ref, Payment.pay_orderid==updateorderID).first()
+        updatepayment.pay_status="Failed"
+        updatepayment.pay_feedback=rsp_json["data"]["processor_response"]
+        
+        #updating order details
+        updateorderdetails=db.session.query(Order_details).filter(Order_details.order_id==updateorderID).all()
+        for details in updateorderdetails:
+            details.payment_status="Failed"
+        db.session.commit()
+        
+        return render_template("transaction_outcome_failed.html", customer=rsp_json['data']['customer']['name'], amount=rsp_json['data']['charged_amount'], trn_ref=txn_ref, currency=rsp_json['data']['currency'], date_of_txn=rsp_json['data']['charged_amount'], day_of_txn=txn_day, time_of_txn=timecreated)
+
+
 
 
 ## Bad Internet
@@ -310,14 +362,14 @@ def pay_with_flutterwave():
         orderplacedDate=orderinfo.order_date
         #Writing into the payment table
         try:
-            pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending',pay_feedback='Pending')
+            pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending',pay_txnID="Pending",pay_feedback='Pending')
             db.session.add(pay_process)
             db.session.commit()
         except:
             the_duplicate=db.session.query(Payment).filter(Payment.pay_ref==session.get('transaction_ref')).first()
             db.session.delete(the_duplicate)
             
-            pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending',pay_feedback='Pending')
+            pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending',pay_txnID="Pending", pay_feedback='Pending')
             db.session.add(pay_process)
             
             db.session.commit()
@@ -333,7 +385,8 @@ def pay_with_flutterwave():
         # Calling Flutterwaves Collect Payment endpoint
         data = {
             "customer": {
-                "email":f"{cust_deets.cust_email}",
+                #"email":f"{cust_deets.cust_email}",
+                "email":f"konkakira1960@gmail.com",
                 "name":f"{customer_name}"
             },
             "amount":orderplacedAmount, 

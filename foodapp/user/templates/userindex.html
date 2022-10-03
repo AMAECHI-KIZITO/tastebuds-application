@@ -139,11 +139,6 @@
 					<h3 class="ps-3" style="color:#384A62; font-family: 'Times-new-roman';">Explore Our Restaurants</h3>
 				</div>
 			</div>
-            
-            {% set duplicate=get_flashed_messages(category_filter="duplicate_entry")%}
-            {% for x in duplicate %}
-            <div class="alert alert-danger">{{x}}</div>
-            {% endfor %}
 
             <div class="row mx-auto">
                 {% for rst in rests %}

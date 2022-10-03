@@ -97,4 +97,5 @@ class Payment(db.Model):
     pay_ref=db.Column(db.String(30), nullable=False, unique=True)
     pay_date=db.Column(db.DateTime(), default=datetime.now())
     pay_status=db.Column(db.Enum('Paid', 'Pending', 'Failed'), nullable=True, default='Pending')
-    pay_feedback=db.Column(db.String(255), nullable=True)
+    pay_txnID=db.Column(db.String(10), nullable=False)
+    pay_feedback=db.Column(db.Text(), nullable=True)
