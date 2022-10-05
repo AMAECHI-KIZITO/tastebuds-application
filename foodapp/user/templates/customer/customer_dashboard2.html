@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>{%block title%}Customer Dashboard{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="author" content="Amaechi Tochukwu">
+		<meta name="keywords" content="Affordable Meals in Nigeria, Restaurants in Nigeria, Online food vendors, Online restorants, cheap meals in Nigeria">
+		<meta name="description" content="Buy delicious foods from Tastebuds at great prices.">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='css/bootstrap.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='font/css/all.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='JQanimate.css')}}">
+        <link rel="icon" href="{{url_for('bpuser.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='DataTables/datatables.min.css')}}">
+        
+		<style type="text/css">
+            
+
+            .topside{
+                background-color:#000;
+            }
+            .topside{
+                min-height:400px;
+                background-image: url("{{url_for("bpuser.static",filename="images/food2.jpg")}}");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: scroll;
+                background-size: cover;
+            }
+            .small{
+                min-height:400px;
+            }
+            .links{
+				text-decoration: none;
+				color: #fff;
+			}
+            .links:hover{
+				color: orange;
+			}
+
+            .bigmenu{
+                min-height:400px;
+                display:flex;
+                align-items:center;
+                justify-content:space-around;
+            }
+            
+            .nav-link:hover{
+                background-color:#704E2E;
+            }
+            
+            .cust_dashboard_links{
+                color:#000;
+            }
+            
+            .cust_dashboard_links:hover{
+                color:white;
+            }
+            
+            .info{
+                background-color:#704E2E;
+            }
+
+            @media screen and (max-width:375px){
+                #theBrand{
+                    font-size:20px
+                }
+            }
+
+            {%block extra_media_query%}
+            {%endblock%}
+
+            {% block style%}
+            {% endblock style%}
+        </style>
+    </head>
+
+    <body style='background-color:#FFF4C2'>
+        <div class="container-fluid">
+            {%block navigation%}
+            <div class="row" style="position:sticky; top:0px; z-index:50; background-color:#704e2e;">
+                <div class="col-10">
+                    <h1 style="font-family:'lucida-calligraphy';color:#EBF8A4">Tastebuds</h1>
+                    <h6 style="font-family:'lucida-calligraphy'; color:#EBF8A4">Hello, {{customer}}</h6>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-sm d-md-none" data-bs-toggle="offcanvas" data-bs-target="#customers_menu">
+                        <i class="fa-solid fa-bars fa-2x"></i>
+                    </button>
+                </div>
+            </div>
+            {%endblock navigation%}
+
+            {%block content%}
+            <!--Large Screens-->
+            <div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
+                <div class="col-md-3" style='border-right:1px solid black;'>
+                    <div class="row bigmenu">
+                        <div class="col">
+                            <ul class="nav flex-column nav-fill">
+                                <li class="nav-item navig mb-1">
+                                    <a href="/user/myaccount/" class="nav-link cust_dashboard_links">Dashboard</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/user/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/user/all-transactions/" class="nav-link cust_dashboard_links">All Transactions</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/user/customer/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/user/logout/" class="nav-link cust_dashboard_links">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class='row align-items-center' style="min-height:400px; color:#FFF">
+                        <div class='col-4 offset-1 info py-5'>
+                            <p class="text-center">NUMBER OF ORDERS</p>
+                            <p class="text-center" style="font-family:'lucida-calligraphy'; color:#EBF8A4">{{order_numbers}}</p>
+                        </div>
+                        <div class='col-5 offset-1 py-5 info'>
+                            <p class="text-center">FAVORITE RESTAURANT</p>
+                            <p class="text-center" style="font-family:'lucida-calligraphy'; color:#EBF8A4">{{fav_rest}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Small screens-->
+            <div class="row d-md-none align-items-center" style='background-color:#FFF4C2; min-height:400px'>
+                <div class='col-12 mt-3'>
+                    <p class="text-center">NUMBER OF ORDERS</p>
+                    <p class="text-center" style="font-family:'lucida-calligraphy'; color:#F38A20">{{order_numbers}}</p>
+                </div>
+                <div class='col-12'>
+                    <p class="text-center">YOUR FAVORITE RESTAURANT</p>
+                    <p class="text-center" style="font-family:'lucida-calligraphy'; color:#F38A20">{{fav_rest}}</p>
+                </div>
+            </div>
+
+            {%endblock content%}
+        </div>
+                
+
+        {%block footer%}
+        <!--Footer-->
+        {#<div class='row align-items-center pt-3' style="background-color:#704e2e; color:#fff">
+            <div class='col-md-5'>
+                <p class="text-center"><img src="{{url_for('bpuser.static', filename='images/tastebuds.png')}}" class='img-fluid' width="200px" height="200px"></p>
+            </div>
+            <div class='col-md-7'>
+                <div class='row'>
+                    <div class="col-md-3 mb-3">
+                        <h5>Information</h5><br>
+                        <a href='/user/' class="d-block links">Home</a>
+                        <a href="#" class="d-block links">Categories</a>
+                        <a href='/contact-us/' class="d-block links">Contact Us</a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <h5>Account</h5><br>
+                        <a href='/user/account/' class="d-block links">Login/Register</a>
+                        {%if session.get('customer_name')!=None and session.get('customer_id')!=None%}
+                        <a href='/user/myaccount/' class="d-block links">Track Orders</a>
+                        {%endif%}
+                        <a href='/user/logout/' class="d-block links">Logout</a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <h5>Follow us</h5><br>
+                        <div class="row">
+                            <div class="col-1">
+                                <a class="d-block links" href='#'><i class="fa-brands fa-facebook-f"></i></a>
+                            </div>
+                            <div class="col-1">
+                                <a class="d-block links" href='#'><i class='fa-brands fa-instagram'></i></a>
+                            </div>
+                            <div class="col-1">
+                                <a class="d-block links" href='#'><i class='fa-brands fa-whatsapp'></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class='row'>
+                <div class='col-12'>
+                    <p class='text-center' style='font-size:12px'>&copy; Developed by Amaechi. All rights reserved</p>
+                </div>
+            </div>
+        </div>#}
+        {%endblock footer%}
+
+
+
+
+        {% block customer_menu %}
+        <!--Off canvas-->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="customers_menu" aria-labelledby="offcanvasTopLabel">
+            <div class="offcanvas-header">
+                <h3 id="offcanvasTopLabel" style="font-family:'lucida-calligraphy'; color: #704E2E;">Tastebuds</h3>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="row">
+                    <div class="col">
+                        <ul class="nav flex-column nav-fill">
+                            <li class="nav-item navig mb-1">
+                                <a href="/user/myaccount/" class="nav-link text-dark">Dashboard</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/user/today-orders/" class="nav-link text-dark">Track Today's Orders</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/user/all-transactions/" class="nav-link text-dark">All Transactions</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/user/customer/password-settings/" class="nav-link text-dark">Password Settings</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/user/logout/" class="nav-link text-dark">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock customer_menu %}
+
+        {%autoescape false%}
+        <script type="text/javascript" src="{{url_for('bpuser.static',filename='jquery/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('bpuser.static',filename='DataTables/datatables.min.js')}}"></script>
+        {#<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>#}
+        {%block scripts%}
+        <script type='text/javascript'>
+            
+        </script>
+        {%endblock scripts%}
+        <script type="text/javascript" src="{{url_for('bpuser.static',filename='js/bootstrap.bundle.js')}}"></script>
+        {%endautoescape%}
+    </body>
+</html>

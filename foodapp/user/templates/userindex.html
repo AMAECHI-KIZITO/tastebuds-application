@@ -11,8 +11,11 @@
 		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='font/css/all.css')}}">
         <link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='JQanimate.css')}}">
         <link rel="icon" href="{{url_for('bpuser.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
-
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='DataTables/datatables.min.css')}}">
+        
 		<style type="text/css">
+            
+
             .topside{
                 background-color:#000;
             }
@@ -43,6 +46,8 @@
 
             {%block extra_media_query%}
             {%endblock%}
+            {% block style%}
+            {% endblock style%}
         </style>
     </head>
     <body style='background-color:#FFF4C2'>
@@ -68,6 +73,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" href="/admin/login/" style="color: #FFF4C2;"><b>Admin</b></a>
                                 </li>
+                                {%if session.get('customer_name')!=None and session.get('customer_id')!=None%}
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="/user/myaccount/" style="color: #FFF4C2;"><b>Track Orders</b></a>
+                                </li>
+                                {% endif %}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link active dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #FFF4C2;"><b>Categories</b>
                                     </a>
@@ -94,17 +104,6 @@
                                 <button type="button" id="shopcart" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#orderPlaced" style="position: relative; background-color:#FFF4C2">
 
                                     <i class="fa-solid fa-cart-shopping">
-                                        {#{%if session.get('customer_id')==None and session.get('customer_name')==None%}
-                                            <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px"></span>
-                                        {%else%}
-                                            {%if usercart==0%}
-                                            <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px">0</span>
-                                            {%else%}
-                                            <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px">{{usercart}}</span>
-                                            {%endif%}
-                                        {%endif%}#}
-
-
                                         {%if usercart!=0%}
                                             <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px">{{usercart}}</span>
                                         {%endif%}
@@ -161,23 +160,26 @@
         <!--Footer-->
         <div class='row align-items-center pt-3' style="background-color:#704e2e; color:#fff">
             <div class='col-md-5'>
-                <img src="{{url_for('bpuser.static', filename='images/tastebuds.png')}}" class='img-fluid' width="200px" height="200px">
+                <p class="text-center"><img src="{{url_for('bpuser.static', filename='images/tastebuds.png')}}" class='img-fluid' width="200px" height="200px"></p>
             </div>
             <div class='col-md-7'>
                 <div class='row'>
                     <div class="col-md-3 mb-3">
-                        <h5>Information</h5>
+                        <h5>Information</h5><br>
                         <a href='/user/' class="d-block links">Home</a>
                         <a href="#" class="d-block links">Categories</a>
                         <a href='/contact-us/' class="d-block links">Contact Us</a>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <h5>Account</h5>
+                        <h5>Account</h5><br>
                         <a href='/user/account/' class="d-block links">Login/Register</a>
+                        {%if session.get('customer_name')!=None and session.get('customer_id')!=None%}
+                        <a href='/user/myaccount/' class="d-block links">Track Orders</a>
+                        {%endif%}
                         <a href='/user/logout/' class="d-block links">Logout</a>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <h5>Follow us</h5>
+                        <h5>Follow us</h5><br>
                         <div class="row">
                             <div class="col-1">
                                 <a class="d-block links" href='#'><i class="fa-brands fa-facebook-f"></i></a>
@@ -195,7 +197,6 @@
             
             <div class='row'>
                 <div class='col-12'>
-                    {#<p class='text-center'>Designed and developed by <a href="mailto:thisisamaechi@gmail.com" style="text-decoration:none; color:orange">Amaechi</a></p>#}
                     <p class='text-center' style='font-size:12px'>&copy; Developed by Amaechi. All rights reserved</p>
                 </div>
             </div>
@@ -299,10 +300,14 @@
         {% block foodProductsModal %}
         {% endblock foodProductsModal %}
 
+        {% block customer_menu %}
+        {% endblock customer_menu %}
+
 
 
         {%autoescape false%}
         <script type="text/javascript" src="{{url_for('bpuser.static',filename='jquery/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('bpuser.static',filename='DataTables/datatables.min.js')}}"></script>
         {#<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>#}
 
         {%block scripts%}

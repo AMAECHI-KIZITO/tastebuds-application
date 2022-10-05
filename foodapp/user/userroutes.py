@@ -1,3 +1,4 @@
+""""This module handles the user experience navigating the pages, making payments, updating databases accordingly."""
 import os,re,random,requests,json
 import schedule,time,threading
 from flask import render_template,request,flash,abort,make_response,redirect,session,jsonify
@@ -165,6 +166,7 @@ def verifylogin():
         return redirect("/user/login/")
     
     
+    
 # Account Logout Process
 @userobj.route("/logout/")
 def customerlogout():
@@ -172,6 +174,7 @@ def customerlogout():
     session.pop('customer_name',None)
     session.pop('user_cart_id',None)
     return redirect('/user/login/')
+
 
 #Add to temporary cart
 @userobj.route('/temporarycart/')
@@ -279,9 +282,20 @@ def checkout_temporary_cart():
         return redirect("/user/login/")
 
 
-## Transaction Outcome
+
+
+## Bad Internet
+@userobj.route('/poor/connection/')
+def no_internet():
+    session.pop("user_cart_id", None)
+    return render_template("badinternet.html")
+    
+
+
+## Transaction Outcome and Verification
 @userobj.route('/transaction_outcome/')
 def txn_outcome():
+    ##These are the data sent from flutterwave api on completion of a txn
     txn_status=request.args.get('status')
     txn_ref=request.args.get('tx_ref')
     txn_id=request.args.get('transaction_id')
@@ -292,13 +306,17 @@ def txn_outcome():
         "Content-Type": "application/json",
         "Authorization":"Bearer FLWSECK_TEST-97a829830c93ce6fed7d14ade42d7628-X"
     }
-    response = requests.get( f"https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref={txn_ref}", headers=headers )
-    rsp_json = response.json()
+    try:
+        response = requests.get( f"https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref={txn_ref}", headers=headers )
+        rsp_json = response.json()
+    except:
+        session.pop("user_cart_id", None)
+        return redirect("/user/poor/connection/")
     
     txn_date=rsp_json["data"]["created_at"]
     txn_created=txn_date[0:19]
     txn_day, timecreated=txn_created.split("T")
-    timecreated=datetime.utcfromtimestamp(timecreated) + timedelta(hours=1)
+    #timecreated=datetime.utcfromtimestamp(int(timecreated)) + timedelta(hours=1)
     
     if rsp_json["data"]["status"]=="successful":
         updateorder=db.session.query(Order).filter(Order.ref_no==txn_ref).first()
@@ -307,6 +325,7 @@ def txn_outcome():
         
         #update the order status
         updateorder.payment_status='Paid'
+        
         
         #update payment status
         updatepayment=db.session.query(Payment).filter(Payment.pay_ref==txn_ref, Payment.pay_orderid==updateorderID).first()
@@ -327,6 +346,8 @@ def txn_outcome():
         
         #update the order status
         updateorder.payment_status='Failed'
+        updateorder.order_status='Failed'
+        
         
         #update payment status
         updatepayment=db.session.query(Payment).filter(Payment.pay_ref==txn_ref, Payment.pay_orderid==updateorderID).first()
@@ -337,20 +358,14 @@ def txn_outcome():
         updateorderdetails=db.session.query(Order_details).filter(Order_details.order_id==updateorderID).all()
         for details in updateorderdetails:
             details.payment_status="Failed"
+            details.delivery_status="Failed"
         db.session.commit()
         
         return render_template("transaction_outcome_failed.html", customer=rsp_json['data']['customer']['name'], amount=rsp_json['data']['charged_amount'], trn_ref=txn_ref, currency=rsp_json['data']['currency'], date_of_txn=rsp_json['data']['charged_amount'], day_of_txn=txn_day, time_of_txn=timecreated)
 
 
 
-
-## Bad Internet
-@userobj.route('/poor/connection/')
-def no_internet():
-    return render_template("badinternet.html")
-    
-
-# checkout
+# FLUTTERWAVE PAYMENT INTEGRATION
 @userobj.route('/pay_with_flutterwave/')
 def pay_with_flutterwave():
     if session.get('customer_id')!=None and session.get('customer_name')!=None:
@@ -362,14 +377,14 @@ def pay_with_flutterwave():
         orderplacedDate=orderinfo.order_date
         #Writing into the payment table
         try:
-            pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending',pay_txnID="Pending",pay_feedback='Pending')
+            pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending',pay_feedback='Pending')
             db.session.add(pay_process)
             db.session.commit()
         except:
             the_duplicate=db.session.query(Payment).filter(Payment.pay_ref==session.get('transaction_ref')).first()
             db.session.delete(the_duplicate)
             
-            pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending',pay_txnID="Pending", pay_feedback='Pending')
+            pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending', pay_feedback='Pending')
             db.session.add(pay_process)
             
             db.session.commit()
@@ -385,8 +400,9 @@ def pay_with_flutterwave():
         # Calling Flutterwaves Collect Payment endpoint
         data = {
             "customer": {
-                #"email":f"{cust_deets.cust_email}",
-                "email":f"konkakira1960@gmail.com",
+                "email":f"{cust_deets.cust_email}",
+                #"email":f"konkakira1960@gmail.com",
+                "phonenumber":f"{cust_deets.cust_phone}",
                 "name":f"{customer_name}"
             },
             "amount":orderplacedAmount, 
@@ -420,6 +436,10 @@ def pay_with_flutterwave():
                 for cart_deets in cart_details:
                     db.session.delete(cart_deets)
                 db.session.commit()
+                
+                #clear the session
+                session.pop("user_cart_id", None)
+                
                 #direct to paymentlink
                 return redirect(url)
         except:
@@ -455,6 +475,8 @@ def pay_with_flutterwave():
 
 
 
-
-
-
+## After Request
+@userobj.after_request
+def clearcache(response):
+    response.headers['Cache-Control']="no-cache, no store, must-revalidate"
+    return response

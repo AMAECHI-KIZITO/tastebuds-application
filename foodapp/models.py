@@ -89,6 +89,8 @@ class Order_details(db.Model):
     payment_status=db.Column(db.Enum('Pending', 'Paid', 'Failed'), nullable=False)
     
     Ord_details_prod_info=db.relationship('Product',backref='orderdetails_deets')
+    Order_info=db.relationship('Order',backref='orderdetails_info')
+    Order_rest_info=db.relationship('Restaurant',backref='rest_order_info')
    
 class Payment(db.Model):
     pay_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
@@ -97,5 +99,4 @@ class Payment(db.Model):
     pay_ref=db.Column(db.String(30), nullable=False, unique=True)
     pay_date=db.Column(db.DateTime(), default=datetime.now())
     pay_status=db.Column(db.Enum('Paid', 'Pending', 'Failed'), nullable=True, default='Pending')
-    pay_txnID=db.Column(db.String(10), nullable=False)
     pay_feedback=db.Column(db.Text(), nullable=True)
