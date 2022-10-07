@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>{%block title%}Restaurant Login{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="author" content="Amaechi Tochukwu">
+		<meta name="keywords" content="Affordable Meals in Nigeria, Restaurants in Nigeria, Online food vendors, Online restorants, cheap meals in Nigeria">
+		<meta name="description" content="Buy delicious foods from Tastebuds at great prices.">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='css/bootstrap.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='font/css/all.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='JQanimate.css')}}">
+        <link rel="icon" href="{{url_for('bpvendor.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
+        
+		<style type="text/css">
+            body{
+                min-height:500px;
+                background-image: url("{{url_for("bpvendor.static",filename="images/anime4.jpg")}}");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container-fluid align-items-center" style='background-color:rgba(0,0,0,0.65); min-height:597px;'>
+            
+            <div class="row align-items-center" style='min-height:500px;'>
+                <div class="col-md-6 offset-md-3">
+                    <form action="/vendor/verifylogin/" method="post">
+                        {%set wrong=get_flashed_messages(category_filter="WrongDetails")%}
+                        {%for x in wrong%}
+                        <div class="alert alert-danger">{{x}}</div>
+                        {%endfor%}
+                        <div>
+                            <input class="form-control py-2" type="hidden" name='csrf_token' id='csrf_token' style='border-radius:30px;' value="{{csrf_token()}}">
+                        </div>
+                        <div class="mb-2">
+                            <input type="email" class="form-control py-2" name="email" id="email" style='border-radius:30px;' placeholder="Email"/>
+                        </div>
+                        <div class="mb-2">
+                            <input type="password" class="form-control py-2" name="pswd" id="pswd" style='border-radius:30px;' placeholder="Password"/>
+                        </div>
+                        <div class="mb-2">
+                            <button type='submit' class="form-control btn btn-warning" id="btnLogin" style='border-radius:30px;' onclick="return Login()">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        {%autoescape false%}
+        <script type="text/javascript" src="{{url_for('bpvendor.static',filename='jquery/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('bpvendor.static',filename='js/bootstrap.bundle.js')}}"></script>
+        {%block scripts%}
+        <script type='text/javascript'>
+            function Login(){
+                let mail=$('#email').val()
+                let psk=$('#pswd').val()
+                if( !mail || !psk ){
+                    alert("Complete All Fields");
+                    return false;
+                }
+            }
+        </script>
+        {%endblock scripts%}
+        {%endautoescape%}
+    </body>
+</html>

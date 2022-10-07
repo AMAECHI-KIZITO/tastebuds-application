@@ -1,5 +1,6 @@
 import os,re
 from flask import render_template,request,flash,abort,make_response,redirect,session
+from werkzeug.security import generate_password_hash, check_password_hash
 from . import adminobj
 from foodapp.models import *
 
@@ -78,8 +79,9 @@ def registerRestaurant():
                         if extension in allowed:
                             originalfile = "foodapp/user/static/rest_imgs/"+originalfilename
                             ResImage.save(originalfile)
+                            securepassword=generate_password_hash('0000')
                             try:
-                                reg=Restaurant(rest_name=ResName, rest_address=ResAddress, rest_phone=ResPhone, rest_email=ResEmail, rest_about=ResAbout, rest_img=originalfilename)
+                                reg=Restaurant(rest_name=ResName, rest_address=ResAddress, rest_phone=ResPhone, rest_email=ResEmail, rest_about=ResAbout, rest_img=originalfilename, rest_pswd=securepassword)
                                 db.session.add(reg)
                                 db.session.commit()
                                 flash("Registration Successful", category="Good_rest_reg")

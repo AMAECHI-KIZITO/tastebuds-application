@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>{%block title%}Restaurant Dashboard{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="author" content="Amaechi Tochukwu">
+		<meta name="keywords" content="Affordable Meals in Nigeria, Restaurants in Nigeria, Online food vendors, Online restorants, cheap meals in Nigeria">
+		<meta name="description" content="Buy delicious foods from Tastebuds at great prices.">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='css/bootstrap.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='font/css/all.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='JQanimate.css')}}">
+        <link rel="icon" href="{{url_for('bpvendor.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='DataTables/datatables.min.css')}}">
+        
+		<style type="text/css">
+            .bigmenu{
+                min-height:400px;
+                display:flex;
+                align-items:center;
+                justify-content:space-around;
+            }
+            
+            .nav-link:hover{
+                background-color:#704E2E;
+            }
+            
+            .cust_dashboard_links{
+                color:#000;
+            }
+            
+            .cust_dashboard_links:hover{
+                color:white;
+            }
+            
+            .info{
+                background-color:#704E2E;
+            }
+
+            @media screen and (max-width:375px){
+                #theBrand{
+                    font-size:20px
+                }
+            }
+
+            {%block extra_media_query%}
+            {%endblock%}
+
+            {% block style%}
+            {% endblock style%}
+        </style>
+    </head>
+
+    <body style='background-color:#FFF4C2'>
+        <div class="container-fluid">
+            {%block navigation%}
+            <div class="row" style="position:sticky; top:0px; z-index:50; background-color:#704e2e;">
+                <div class="col-10">
+                    <h1 style="font-family:'lucida-calligraphy';color:#EBF8A4">{{session.get("rest_name")}}</h1>
+                    <h6 style="font-family:'lucida-calligraphy'; color:#EBF8A4">Welcome Back</h6>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-sm d-md-none" data-bs-toggle="offcanvas" data-bs-target="#restaurants_menu">
+                        <i class="fa-solid fa-bars fa-2x"></i>
+                    </button>
+                </div>
+            </div>
+            {%endblock navigation%}
+
+            {%block content%}
+            <!--Large Screens-->
+            <div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
+                <div class="col-md-3" style='border-right:1px solid black;'>
+                    <div class="row bigmenu">
+                        <div class="col">
+                            <ul class="nav flex-column nav-fill">
+                                <li class="nav-item navig mb-1">
+                                    <a href="/vendor/vendor-dashboard/" class="nav-link cust_dashboard_links">Dashboard</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/vendor/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/vendor/all-transactions/" class="nav-link cust_dashboard_links">All Transactions</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/vendor/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/vendor/logout/" class="nav-link cust_dashboard_links">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class='row align-items-center' style="min-height:400px; color:#FFF">
+                        <div class='col-4 offset-1 info py-5'>
+                            <p class="text-center">TODAY'S ORDERS</p>
+                            <p class="text-center" style="font-family:'lucida-calligraphy'; color:#EBF8A4">{{order_numbers}}</p>
+                        </div>
+                        <div class='col-4 offset-1 info py-5'>
+                            <p class="text-center">TODAY'S NUMBERS (&#8358;)</p>
+                            <p class="text-center" style="font-family:'lucida-calligraphy'; color:#EBF8A4">{{order_numbers}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Small screens-->
+            <div class="row d-md-none align-items-center" style='background-color:#FFF4C2; min-height:400px'>
+                <div class='col-12 mt-3'>
+                    <p class="text-center">NUMBER OF ORDERS</p>
+                    <p class="text-center" style="font-family:'lucida-calligraphy'; color:#F38A20">{{order_numbers}}</p>
+                </div>
+                <div class='col-12'>
+                    <p class="text-center">YOUR FAVORITE RESTAURANT</p>
+                    <p class="text-center" style="font-family:'lucida-calligraphy'; color:#F38A20">{{fav_rest}}</p>
+                </div>
+            </div>
+
+            {%endblock content%}
+        </div>
+
+
+        {% block restaurants_menu %}
+        <!--Off canvas-->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="restaurants_menu" aria-labelledby="offcanvasTopLabel">
+            <div class="offcanvas-header">
+                <h3 id="offcanvasTopLabel" style="font-family:'lucida-calligraphy'; color: #704E2E;">Tastebuds</h3>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="row">
+                    <div class="col">
+                        <ul class="nav flex-column nav-fill">
+                            <li class="nav-item navig mb-1">
+                                <a href="/vendor/vendor-dashboard/" class="nav-link text-dark">Dashboard</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/vendor/today-orders/" class="nav-link text-dark">Track Today's Orders</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/vendor/all-transactions/" class="nav-link text-dark">All Transactions</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/vendor/password-settings/" class="nav-link text-dark">Password Settings</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/vendor/logout/" class="nav-link text-dark">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock restaurants_menu %}
+
+        {%autoescape false%}
+        <script type="text/javascript" src="{{url_for('bpvendor.static',filename='jquery/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('bpvendor.static',filename='DataTables/datatables.min.js')}}"></script>
+        {%block scripts%}
+        <script type='text/javascript'>
+            
+        </script>
+        {%endblock scripts%}
+        <script type="text/javascript" src="{{url_for('bpvendor.static',filename='js/bootstrap.bundle.js')}}"></script>
+        {%endautoescape%}
+    </body>
+</html>

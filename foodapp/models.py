@@ -23,7 +23,9 @@ class Restaurant(db.Model):
     rest_about=db.Column(db.Text(500), nullable=False)
     rest_img=db.Column(db.String(80), nullable=False)
     rest_reg_date=db.Column(db.Date(), nullable=False, default=date.today())
+    rest_pswd=db.Column(db.String(200),nullable=False)
     
+        
 class Admin(db.Model):
     admin_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
     admin_firstname=db.Column(db.String(30), nullable=False)
@@ -44,16 +46,7 @@ class Product(db.Model):
     prod_cat=db.Column(db.Integer(), db.ForeignKey('category.cat_id')) #FK
     prod_price=db.Column(db.Float(), nullable=False)
     prod_image=db.Column(db.String(50), nullable=False)
-    
-    
-# class Cart(db.Model):
-#     cart_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
-#     buyer_id=db.Column(db.Integer(), db.ForeignKey('customer.cust_id')) #FK
-#     product=db.Column(db.Integer(), db.ForeignKey('product.prod_id')) #FK
-#     product_qty=db.Column(db.Integer(), nullable=False)
-#     prod_restaurant=db.Column(db.Integer(), db.ForeignKey('restaurant.rest_id')) #FK
-#     amount=db.Column(db.Float(), nullable=False)
-#     cart_date=db.Column(db.Date(), nullable=False)
+
     
 class Temporarycart(db.Model):
     temp_cart_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
