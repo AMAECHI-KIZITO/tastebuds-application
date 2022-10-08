@@ -70,6 +70,9 @@ class Order(db.Model):
     order_amount=db.Column(db.Float(), nullable=False)
     payment_status=db.Column(db.Enum('Pending', 'Paid', 'Failed', 'Network Failed'), nullable=False)
 
+    Order_cust_info=db.relationship('Customer',backref='cust_orders')
+    
+    
     
 class Order_details(db.Model):
     details_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
@@ -78,7 +81,7 @@ class Order_details(db.Model):
     prod_qty=db.Column(db.Integer(), nullable=False)
     amount=db.Column(db.Float(), nullable=False)
     restaurant=db.Column(db.Integer(), db.ForeignKey('restaurant.rest_id')) #FK
-    delivery_status=db.Column(db.Enum('Pending', 'Success', 'Failed'), nullable=False)
+    delivery_status=db.Column(db.Enum('Pending','Declined','Dispatched','Success', 'Failed'), nullable=False)
     payment_status=db.Column(db.Enum('Pending', 'Paid', 'Failed'), nullable=False)
     
     Ord_details_prod_info=db.relationship('Product',backref='orderdetails_deets')
