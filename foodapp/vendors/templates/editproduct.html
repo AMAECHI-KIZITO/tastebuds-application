@@ -1,0 +1,319 @@
+{% extends "vendordashboard.html" %}
+
+{% block title %} Products List {% endblock title%}
+
+
+{% block style %}
+#DataTables_Table_1_length{
+    display:none;
+}
+#DataTables_Table_1_filter{
+    font-size:12px;
+}
+#DataTables_Table_1_wrapper{
+    font-size:12px;
+}
+{% endblock style %}
+
+
+
+{%block content%}
+<!--Large Screens-->
+<div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
+    <div class="col-md-3" style='border-right:1px solid black;'>
+        <div class="row bigmenu">
+            <div class="col">
+                <ul class="nav flex-column nav-fill">
+                    <li class="nav-item navig mb-1">
+                        <a href="/vendor/vendor-dashboard/" class="nav-link cust_dashboard_links">Dashboard</a>
+                    </li>
+                    <li class="nav-item navig mb-1">
+                        <a href="/vendor/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
+                    </li>
+                    <li class="nav-item navig mb-1">
+                        <a href="/vendor/all/products/" class="nav-link cust_dashboard_links">All Products</a>
+                    </li>
+                    <li class="nav-item navig mb-1">
+                        <a href="/vendor/add/products/" class="nav-link cust_dashboard_links">Add Products</a>
+                    </li>
+                    <li class="nav-item navig mb-1">
+                        <a href="/vendor/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
+                    </li>
+                    <li class="nav-item navig mb-1">
+                        <a href="/vendor/logout/" class="nav-link cust_dashboard_links">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class='row'>
+            <div class="col-6 offset-3">
+                <h2>Product Edit</h2><hr>
+                <p id="Feedback">Fields marked * are required</p>
+                <form id='editProduct' enctype="multipart/form-data">
+                    <div class="d-none">
+                        <input type='hidden' name='product_id' id='product_id' value='{{products.prod_id}}' class="form-control"/>
+                    </div>
+                    <div class="d-none">
+                        <input type='hidden' name='restID' id='restID' value='{{session.get("restaurant_id")}}' class="form-control"/>
+                    </div>
+                    <div class="d-none">
+                        <input type="hidden" name="csrf_token" id='csrf_token' value="{{csrf_token()}}" class="form-control"/>
+                    </div>
+                    <div class='mb-2'>
+                        <label><b>Product Name *</b></label>
+                        <input type="text" name="product_name" id='product_name' value="{{products.prod_name}}" class="form-control"/>
+                        <p id='nameFeedback' style="font-size:12px"></p>
+                    </div>
+                    <div class='mb-2'>
+                        <label><b>Product Price *</b></label>
+                        <input type="text" name="product_price" id='product_price' value="{{products.prod_price}}" class="form-control">
+                        <p id='priceFeedback' style="font-size:12px"></p>
+                    </div>
+                    <div class='mb-2'>
+                        <label><b>Product Category *</b></label>
+                        <select class="form-select" id='product_category' name="product_category">
+                            <option value='#'>Select a category</option>
+                            {% for cat in category%}
+                            <option value='{{cat.cat_id}}'>{{cat.cat_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <p id='categoryFeedback' style="font-size:12px"></p>
+                    </div>
+                    <div class='mb-2'>
+                        <label><b>Product Image *</b></label>
+                        <input type="file" name="product_img" id='product_img' class="form-control">
+                        <p id='imageFeedback' style="font-size:12px"></p>
+                    </div>
+                    <div class='mb-2'>
+                        <label><b>Description *</b></label>
+                        <textarea class="form-control" name='product_desc' id='product_desc' placeholder='{{products.prod_description}}' value="{{products.prod_description}}" ></textarea>
+                        <p id='descFeedback' style="font-size:12px"></p>
+                    </div>
+                    <button type="button" id='btnEditProduct' class="btn btn-sm text-light mt-2 float-end" style='background-color:#704e2e;'>Proceed</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Small screens-->
+<div class="row d-md-none" style='background-color:#FFF4C2;'>
+    <div class='col-12 mt-1'>
+        <h2>Product Edit</h2><hr>
+        <p id="smallScreenFeedback">Fields marked * are required</p>
+        <form id='smallScreenEditProduct' enctype="multipart/form-data">
+            <div class="d-none">
+                <input type='number' name='smallScreenProduct_id' id='smallScreenProduct_id' value='{{products.prod_id}}' class="form-control"/>
+            </div>
+            <div class="d-none">
+                <input type='number' name='smallScreenRestID' id='smallScreenRestID' value='{{session.get("restaurant_id")}}' class="form-control"/>
+            </div>
+            <div class="d-none">
+                <input type="text" name="csrf_token" id='csrf_token' value="{{csrf_token()}}" class="form-control">
+            </div>
+            <div class='mb-2'>
+                <label><b>Product Name</b></label>
+                <input type="text" name="smallScreenProductName" id='smallScreenProductName' value="{{products.prod_name}}" class="form-control">
+                <p id='nameSmallScreenFeedback' style="font-size:12px"></p>
+            </div>
+            <div class='mb-2'>
+                <label><b>Product Price</b></label>
+                <input type="text" name="smallScreenProductPrice" id='smallScreenProductPrice' value="{{products.prod_price}}" class="form-control">
+                <p id='priceSmallScreenFeedback' style="font-size:12px"></p>
+            </div>
+            <div class='mb-2'>
+                <label><b>Product Category</b></label>
+                <select class="form-select" id='smallScreenProductCategory' name="smallScreenProductCategory">
+                    <option value='#'>Select a category</option>
+                    {% for cat in category%}
+                    <option value='{{cat.cat_id}}'>{{cat.cat_name}}</option>
+                    {% endfor %}
+                </select>
+                <p id='categorySmallScreenFeedback' style="font-size:12px"></p>
+            </div>
+            <div class='mb-2'>
+                <label><b>Product Image</b></label>
+                <input type="file" name="smallScreenProductImg" id='smallScreenProductImg' class="form-control">
+                <p id='imgSmallScreenFeedback' style="font-size:12px"></p>
+            </div>
+            <div class='mb-2'>
+                <label><b>Description</b></label>
+                <textarea class="form-control" name='smallScreenProductDesc' id='smallScreenProductDesc' placeholder='{{products.prod_description}}'></textarea>
+                <p id='descSmallScreenFeedback' style="font-size:12px"></p>
+            </div>
+            <button type="button" id='btnSmallScreenEditProduct' class="btn btn-sm text-light mt-2 float-end" style='background-color:#704e2e;'>Proceed</button>
+        </form>
+    </div>
+</div>
+{%endblock content%}
+
+
+{%block scripts%}
+    <script type='text/javascript'>
+        // For Big Screens Update Product
+        $('#product_img').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#imageFeedback').text("This field is required");
+                $('#imageFeedback').css("color", "red");
+            }else{
+                $('#imageFeedback').text('');
+            }
+        })
+        $('#product_name').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#nameFeedback').text("This field is required");
+                $('#nameFeedback').css("color", "red");
+            }else{
+                $('#nameFeedback').text('');
+            }
+        })
+        $('#product_price').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#priceFeedback').text("This field is required");
+                $('#priceFeedback').css("color", "red");
+            }else{
+                $('#priceFeedback').text('');
+            }
+        })
+        $('#product_desc').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#descFeedback').text("This field is required");
+                $('#descFeedback').css("color", "red");
+            }else{
+                $('#descFeedback').text('');
+            }
+        })
+        $('#product_category').keyup(function(){
+            if( $(this).val()=="#" ){
+                $('#categoryFeedback').text("This field is required");
+                $('#categoryFeedback').css("color", "red");
+            }else{
+                $('#categoryFeedback').text('');
+            }
+        })
+
+
+
+        $('#btnEditProduct').click(function(){
+            var form = document.getElementById('editProduct')
+            var formdata= new FormData(form)
+            $.ajax({
+                
+                url:"/vendor/update/product/",
+                data:formdata,
+                dataType:"text",
+                type:"post",
+                cache:false,
+                processData:false,
+                contentType:false,
+                beforeSend:function(){
+                    if( $('#product_name').val()=="" || $('#product_desc').val()=="" || $('#product_img').val()=="" || $('#product_category').val()=="#" || $('#product_price').val()==""){
+                        alert('Fill out all fields')
+                        return false;
+                    };
+                },
+                success:function(rsp){
+                    if( rsp =='Update Successful' ){
+                        $('#Feedback').addClass("alert alert-success");
+                        $('#Feedback').text(rsp);
+                        $('#btnEditProduct').prop('disabled', true)
+                    }
+                    else{
+                        $('#Feedback').removeClass("alert alert-success");
+                        $('#Feedback').addClass("alert alert-danger");
+                        $('#Feedback').text(rsp);
+                    }
+                },  
+                error:function(msg){
+                    console.log(msg)
+                }
+            })
+        })   
+    </script>
+
+
+    <script type='text/javascript'>
+        // For Small Screens Update Product
+        $('#smallScreenProductName').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#nameSmallScreenFeedback').text("This field is required");
+                $('#nameSmallScreenFeedback').css("color", "red");
+            }else{
+                $('#nameSmallScreenFeedback').text('');
+            }
+        })
+        $('#smallScreenProductPrice').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#priceSmallScreenFeedback').text("This field is required");
+                $('#priceSmallScreenFeedback').css("color", "red");
+            }else{
+                $('#priceSmallScreenFeedback').text('');
+            }
+        })
+        $('#smallScreenProductCategory').keyup(function(){
+            if( $(this).val()=="#" ){
+                $('#categorySmallScreenFeedback').text("This field is required");
+                $('#categorySmallScreenFeedback').css("color", "red");
+            }else{
+                $('#categorySmallScreenFeedback').text('');
+            }
+        })
+        $('#smallScreenProductImg').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#imgSmallScreenFeedback').text("This field is required");
+                $('#imgSmallScreenFeedback').css("color", "red");
+            }else{
+                $('#imgSmallScreenFeedback').text('');
+            }
+        })
+        $('#smallScreenProductDesc').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#descSmallScreenFeedback').text("This field is required");
+                $('#descSmallScreenFeedback').css("color", "red");
+            }else{
+                $('#descSmallScreenFeedback').text('');
+            }
+        })
+
+
+
+        $('#btnSmallScreenEditProduct').click(function(){
+            var form = document.getElementById('smallScreenEditProduct')
+            var formdata= new FormData(form)
+            $.ajax({
+                
+                url:"/vendor/update-product/",
+                data:formdata,
+                dataType:"text",
+                type:"post",
+                cache:false,
+                processData:false,
+                contentType:false,
+                beforeSend:function(){
+                    if( $('#smallScreenProductName').val()=="" || $('#smallScreenProductDesc').val()=="" || $('#smallScreenProductImg').val()=="" || $('#smallScreenProductCategory').val()=="#" || $('#smallScreenProductPrice').val()==""){
+                        alert('Fill out all fields')
+                        return false;
+                    };
+                },
+                success:function(rsp){
+                    if( rsp =='Update Successful' ){
+                        $('#smallScreenFeedback').addClass("alert alert-success");
+                        $('#smallScreenFeedback').text(rsp);
+                        $('#btnSmallScreenEditProduct').prop('disabled', true)
+                    }
+                    else{
+                        $('#smallScreenFeedback').removeClass("alert alert-success");
+                        $('#smallScreenFeedback').addClass("alert alert-danger");
+                        $('#smallScreenFeedback').text(rsp);
+                    }
+                },  
+                error:function(msg){
+                    console.log(msg)
+                }
+            })
+        })   
+    </script>
+{%endblock scripts%}

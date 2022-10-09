@@ -57,7 +57,7 @@
             <div class="row" style="position:sticky; top:0px; z-index:50; background-color:#704e2e;">
                 <div class="col-10">
                     <h1 style="font-family:'lucida-calligraphy';color:#EBF8A4">{{session.get("rest_name")}}</h1>
-                    <h6 style="font-family:'lucida-calligraphy'; color:#EBF8A4">Welcome Back</h6>
+                    <h6 style="font-family:'lucida-calligraphy'; color:#EBF8A4">Welcome Back <i class="fa-solid fa-face-smile"></i></h6>
                 </div>
                 <div class="col-2">
                     <button type="button" class="btn btn-sm d-md-none" data-bs-toggle="offcanvas" data-bs-target="#restaurants_menu">
@@ -81,7 +81,10 @@
                                     <a href="/vendor/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
                                 </li>
                                 <li class="nav-item navig mb-1">
-                                    <a href="/vendor/all-transactions/" class="nav-link cust_dashboard_links">All Transactions</a>
+                                    <a href="/vendor/all/products/" class="nav-link cust_dashboard_links">All Products</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/vendor/add/products/" class="nav-link cust_dashboard_links">Add Products</a>
                                 </li>
                                 <li class="nav-item navig mb-1">
                                     <a href="/vendor/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
@@ -149,7 +152,10 @@
                                 <a href="/vendor/today-orders/" class="nav-link text-dark">Track Today's Orders</a>
                             </li>
                             <li class="nav-item navig mb-1">
-                                <a href="/vendor/all-transactions/" class="nav-link text-dark">All Transactions</a>
+                                <a href="/vendor/all/products/" class="nav-link text-dark">All Products</a>
+                            </li>
+                            <li class="nav-item navig mb-1">
+                                <a href="/vendor/add/products/" class="nav-link text-dark">Add Products</a>
                             </li>
                             <li class="nav-item navig mb-1">
                                 <a href="/vendor/password-settings/" class="nav-link text-dark">Password Settings</a>
@@ -165,25 +171,13 @@
         {% endblock restaurants_menu %}
 
 
-        {%block change_delivery_status_modal %}
-        <div class="modal fade" id="change_delivery_status" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        {%block change_delivery_status_modal %}        
         {%endblock change_delivery_status_modal %}
+
+
+        {%block editproductmodal %}
+        {%endblock editproductmodal %}
 
         {%autoescape false%}
         <script type="text/javascript" src="{{url_for('bpvendor.static',filename='jquery/jquery.min.js')}}"></script>

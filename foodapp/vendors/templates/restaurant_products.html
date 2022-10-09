@@ -1,6 +1,21 @@
 {% extends "vendordashboard.html" %}
 
-{% block title %} {{session.get('rest_name')}} Orders {% endblock title%}
+{% block title %} Products List {% endblock title%}
+
+
+{% block style %}
+#DataTables_Table_1_length{
+    display:none;
+}
+#DataTables_Table_1_filter{
+    font-size:12px;
+}
+#DataTables_Table_1_wrapper{
+    font-size:12px;
+}
+{% endblock style %}
+
+
 
 {%block content%}
 <!--Large Screens-->
@@ -17,7 +32,7 @@
                     </li>
                     <li class="nav-item navig mb-1">
                         <a href="/vendor/all/products/" class="nav-link cust_dashboard_links">All Products</a>
-                    </li>
+                    </li> 
                     <li class="nav-item navig mb-1">
                         <a href="/vendor/add/products/" class="nav-link cust_dashboard_links">Add Products</a>
                     </li>
@@ -33,31 +48,30 @@
     </div>
 
     <div class="col-md-9">
-        {% if restaurants_specific_ids_orders != [] %}
+        {% if products != [] %}
         <div class='row'>
             <div class="col">
-                <h2>Today's Orders</h2><hr>
+                <h2>Products</h2><hr>
                 <table class="table table-hover myTable">
                     <thead>
                         <tr>
                             <th>S/N</th>
-                            <th>Customer</th>
-                            <th>Address</th>
-                            <th>Date</th>
-                            <th>Details</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price(&#8358;)</th>
+                            <th>Image</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for x in restaurants_specific_ids_orders%}
+                        {% for x in products%}
                             <tr>
                                 <td>{{loop.index}}</td>
-                                {% for a,b in x.items()%}
-                                    {% if a == "order_id" %}
-                                        <td><a class="btn text-light btn-sm" style='background-color:#704e2e;' href="/vendor/orderdetails/{{b}}">Info</a></td>
-                                    {% else%}
-                                        <td>{{b}}</td>
-                                    {% endif %}
-                                {% endfor %}
+                                <td>{{x.prod_name}}</td>
+                                <td>{{x.product_category.cat_name}}</td>
+                                <td>{{"{:,.0f}".format(x.prod_price)}}</td>
+                                <td><img src="{{url_for('bpuser.static',filename='rest_prod_imgs/'+x.prod_image)}}" width='100px' height='100px'></td>
+                                <td><a href='/vendor/edit-product/{{x.prod_id}}' class='btn text-light btn-sm'style="background-color:#704E2E">Edit</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -67,12 +81,12 @@
         {% else %}
         <div class="row">
             <div class="col">
-                <h2>Today's Orders</h2><hr>
+                <h2>Products</h2><hr>
             </div>
         </div>
         <div class="row align-items-center" style="min-height:400px">
             <div class="col">
-                <h4 class="text-center">No Orders Available Today</h4>
+                <h4 class="text-center">No Products Available</h4>
             </div>
         </div>
         {% endif %}
@@ -83,28 +97,27 @@
 <div class="row d-md-none" style='background-color:#FFF4C2;'>
     {% if restaurants_specific_ids_orders != [] %}
     <div class='col-12 mt-1'>
-        <h2>Today's Orders</h2><hr>
+        <h2>Products</h2><hr>
         <table class="table table-hover myTable" style='font-size:12px'>
             <thead>
                 <tr>
                     <th>S/N</th>
-                    <th>Customer</th>
-                    <th>Address</th>
-                    <th>Date</th>
-                    <th>Details</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price(&#8358;)</th>
+                    <th>Image</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for x in restaurants_specific_ids_orders%}
+                {% for x in products%}
                     <tr>
                         <td>{{loop.index}}</td>
-                        {% for a,b in x.items()%}
-                            {% if a == "order_id" %}
-                                <td><a class="btn text-light btn-sm" style='background-color:#704e2e;' href="/vendor/orderdetails/{{b}}">Info</a></td>
-                            {% else%}
-                                <td>{{b}}</td>
-                            {% endif %}
-                        {% endfor %}
+                        <td>{{x.prod_name}}</td>
+                        <td>{{x.product_category.cat_name}}</td>
+                        <td>{{"{:,.0f}".format(x.prod_price)}}</td>
+                        <td><img src="{{url_for('bpuser.static',filename='rest_prod_imgs/'+x.prod_image)}}" width='40px' height='40px'></td>
+                        <td><a href='/vendor/edit-product/{{x.prod_id}}'>Edit</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -112,16 +125,25 @@
     </div>
     {% else %}
     <div class="col-12 mt-1">
-        <h2>Today's Orders</h2><hr>
+        <h2>Products</h2><hr>
     
         <div class="row align-items-center" style="min-height:400px">
             <div class="col">
-                <h4 class="text-center">No Orders Available Today</h4>
+                <h4 class="text-center">No Products Available</h4>
             </div>
         </div>
     </div>
         
     {% endif %}
 </div>
-
 {%endblock content%}
+
+
+
+{%block scripts%}
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $('.myTable').DataTable();
+        })
+    </script>
+{%endblock scripts%}

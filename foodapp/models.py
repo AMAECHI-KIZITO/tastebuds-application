@@ -47,7 +47,7 @@ class Product(db.Model):
     prod_price=db.Column(db.Float(), nullable=False)
     prod_image=db.Column(db.String(50), nullable=False)
 
-    
+    product_category=db.relationship("Category", backref="category_products")
 class Temporarycart(db.Model):
     temp_cart_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
     user_temp_id=db.Column(db.Integer(), nullable=False)
