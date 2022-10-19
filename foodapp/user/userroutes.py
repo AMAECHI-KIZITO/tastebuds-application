@@ -27,8 +27,10 @@ def home():
                 total=total+i.amount
         else:
             total=0
+            
         rests=db.session.query(Restaurant).all()
-        return render_template('userindex.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total)
+        category=db.session.query(Category).all()
+        return render_template('userindex.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total,category=category)
     else:
         shopping_ID = session.get('user_cart_id')
         usercart=db.session.query(Temporarycart).filter(Temporarycart.user_temp_id==shopping_ID, Temporarycart.temp_cart_date==date.today()).count()
@@ -41,7 +43,9 @@ def home():
                 total=total+i.amount
         else:
             total=0
-        return render_template('userindex.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total)
+        
+        category=db.session.query(Category).all()
+        return render_template('userindex.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total,category=category)
     
     
 #Resturants Page Template
@@ -67,7 +71,9 @@ def restaurants(id):
                 total=total+i.amount
         else:
             total=0
-        return render_template('restaurants.html', rest_info=rest_info, rest_maindish=rest_maindish, swallow=rest_swallow, soup=rest_soups, protein=rest_proteins, desserts=rest_desserts, bread=rest_bread, salad=rest_salads, drink=rest_drinks,usercart=usercart, usercartdeets=usercartdeets, total=total)
+            
+        category=db.session.query(Category).all()
+        return render_template('restaurants.html', rest_info=rest_info, rest_maindish=rest_maindish, swallow=rest_swallow, soup=rest_soups, protein=rest_proteins, desserts=rest_desserts, bread=rest_bread, salad=rest_salads, drink=rest_drinks,usercart=usercart, usercartdeets=usercartdeets, total=total, category=category)
     else:
         return redirect('/user/')
 
@@ -85,7 +91,8 @@ def newaccount():
             total=total+i.amount
     else:
         total=0
-    return render_template('newaccount.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total)
+    category=db.session.query(Category).all()
+    return render_template('newaccount.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total,category=category)
 
 #Account Login Template
 @userobj.route('/login/')
@@ -101,7 +108,10 @@ def login():
             total=total+i.amount
     else:
         total=0
-    return render_template('login.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total)
+    category=db.session.query(Category).all()
+    return render_template('login.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total, category=category)
+
+
 
 #Account Registration Form Verification Process
 @userobj.route("/createaccount/", methods=["POST"])
@@ -193,7 +203,7 @@ def temporaryCart():
         db.session.add(temp)
         db.session.commit()
         
-        return 'Added Successfully. To have an updated cart, kindly refresh the page."'
+        return 'Item Added."'
     else:
         return redirect('/user/')
 
@@ -204,7 +214,7 @@ def remove_temporary_item():
     item_to_delete=db.session.query(Temporarycart).filter(Temporarycart.temp_cart_id==trashID).first()
     db.session.delete(item_to_delete)
     db.session.commit()
-    return "Item deleted. To have an updated cart, kindly refresh the page."
+    return "Item deleted."
 
 
 
@@ -219,7 +229,7 @@ def empty_temporary_cart():
         for deletecart in items_to_delete:
             db.session.delete(deletecart)
             db.session.commit()
-        return "Cart Emptied Successfully. Please Refresh The Page."
+        return "Cart Emptied."
     
     
 # checkout
@@ -375,6 +385,7 @@ def pay_with_flutterwave():
         orderplacedID=orderinfo.order_id
         orderplacedAmount=orderinfo.order_amount
         orderplacedDate=orderinfo.order_date
+        
         #Writing into the payment table
         try:
             pay_process=Payment(pay_orderid=orderplacedID, pay_amt=orderplacedAmount, pay_ref=session.get('transaction_ref'), pay_date=datetime.now(), pay_status='Pending',pay_feedback='Pending')
@@ -401,7 +412,6 @@ def pay_with_flutterwave():
         data = {
             "customer": {
                 "email":f"{cust_deets.cust_email}",
-                #"email":f"konkakira1960@gmail.com",
                 "phonenumber":f"{cust_deets.cust_phone}",
                 "name":f"{customer_name}"
             },
@@ -480,3 +490,31 @@ def pay_with_flutterwave():
 def clearcache(response):
     response.headers['Cache-Control']="no-cache, no store, must-revalidate"
     return response
+
+
+# Category Access
+@userobj.route('/category/<cat_id>')
+def category_selection(cat_id):
+    shopping_ID = session.get('user_cart_id')
+    if shopping_ID!=None:
+        usercart=db.session.query(Temporarycart).filter(Temporarycart.user_temp_id==shopping_ID, Temporarycart.temp_cart_date==date.today()).count()
+        usercartdeets=db.session.query(Temporarycart).filter(Temporarycart.user_temp_id==shopping_ID, Temporarycart.temp_cart_date==date.today()).all()
+        rests=db.session.query(Restaurant).all()
+        
+        category=db.session.query(Category).all()
+        requested_cat_products=db.session.query(Product).filter(Product.prod_cat==cat_id).all() 
+        cat_info=db.session.query(Category).filter(Category.cat_id==cat_id).first() 
+        category_name=cat_info.cat_name
+        
+        
+        
+        if usercartdeets!=[]:
+            total=0
+            for i in usercartdeets:
+                total=total+i.amount
+        else:
+            total=0
+        
+        return render_template('category.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total, category=category, requested_cat_products=requested_cat_products, cat_id=cat_id, category_name=category_name)
+    else:
+        return redirect('/user/')

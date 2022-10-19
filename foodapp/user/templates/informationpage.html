@@ -4,6 +4,18 @@
 TasteBuds - Order Information
 {%endblock title%}
 
+{%block navigation%}
+<!--Navigation-->
+    <div class="row" style="position:sticky; top:0px; z-index:5">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-1">
+            <div class="container-fluid">
+                <a class="navbar-brand brandname" href="/user/" style="font-family:'lucida-calligraphy'; color:#FFF4C2;"><h3 id='theBrand'>TasteBuds</h3></a>
+            </div>
+        </nav>
+    </div>
+{%endblock navigation%}
+
+
 {%block content%}
 <div class="row pt-3 align-items-center"  style='background-color:#FFF4C2'>
     <div class="col-md-6 offset-md-3 pb-3">
@@ -40,8 +52,6 @@ TasteBuds - Order Information
 </div>
 {%endblock content%}
 
-{%block scripts%}
-<script type='text/javascript'>
-    
-</script>
-{%endblock scripts%}
+{%block footer%}
+<div class="d-none"></div>
+{%endblock footer%}

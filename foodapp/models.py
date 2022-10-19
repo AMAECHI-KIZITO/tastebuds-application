@@ -48,6 +48,8 @@ class Product(db.Model):
     prod_image=db.Column(db.String(50), nullable=False)
 
     product_category=db.relationship("Category", backref="category_products")
+    product_restaurant=db.relationship("Restaurant", backref="restaurant_products")
+    
 class Temporarycart(db.Model):
     temp_cart_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
     user_temp_id=db.Column(db.Integer(), nullable=False)
