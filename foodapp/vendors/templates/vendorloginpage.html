@@ -13,42 +13,57 @@
         <link rel="icon" href="{{url_for('bpvendor.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
         
 		<style type="text/css">
-            body{
-                min-height:500px;
+            .vendor-login{
                 background-image: url("{{url_for("bpvendor.static",filename="images/anime4.jpg")}}");
                 background-position: center;
                 background-repeat: no-repeat;
                 background-attachment: fixed;
                 background-size: cover;
             }
+            @media screen and (max-width:768px){
+                .vendor-login{
+                    min-height: 600px;
+                }
+            }
         </style>
     </head>
 
     <body>
-        <div class="container-fluid align-items-center" style='background-color:rgba(0,0,0,0.65); min-height:597px;'>
-            
-            <div class="row align-items-center" style='min-height:500px;'>
-                <div class="col-md-6 offset-md-3">
-                    <form action="/vendor/verifylogin/" method="post">
-                        {%set wrong=get_flashed_messages(category_filter="WrongDetails")%}
-                        {%for x in wrong%}
-                        <div class="alert alert-danger">{{x}}</div>
-                        {%endfor%}
-                        <div>
-                            <input class="form-control py-2" type="hidden" name='csrf_token' id='csrf_token' style='border-radius:30px;' value="{{csrf_token()}}">
+        <div class="container-fluid">
+            {# For Tablet screens and below #}
+            <div class='row vendor-login' style='display:flex; align-items:center; justify-content:center; min-height:800px'>
+                <div>
+                    <div class='row '>
+                        <div class='col-md-6 offset-md-3'>
+                            <div style='background-color:rgba(0,0,0,0.7); font-family:"lucida calligraphy"'>
+                                <h1 class="text-center text-warning">Welcome</h1>
+                                <h2 class="text-center text-warning">Login to Continue</h2>
+                            </div>
+                            
+                            <form action="/vendor/verifylogin/" method="post">
+                                {%set wrong=get_flashed_messages(category_filter="WrongDetails")%}
+                                {%for x in wrong%}
+                                    <div class="alert alert-danger">{{x}}</div>
+                                {%endfor%}
+                                <div>
+                                    <input class="form-control py-2" type="hidden" name='csrf_token' id='csrf_token' style='border-radius:30px;' value="{{csrf_token()}}">
+                                </div>
+                                <div class="mb-2">
+                                    <input type="email" class="form-control py-2" name="email" id="email" style='border-radius:30px;' placeholder="Email"/>
+                                </div>
+                                <div class="mb-2">
+                                    <input type="password" class="form-control py-2" name="pswd" id="pswd" style='border-radius:30px;' placeholder="Password"/>
+                                </div>
+                                <div class="mb-2">
+                                    <button type='submit' class="form-control btn btn-warning" id="btnLogin" style='border-radius:30px;' onclick="return Login()">Login</button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="mb-2">
-                            <input type="email" class="form-control py-2" name="email" id="email" style='border-radius:30px;' placeholder="Email"/>
-                        </div>
-                        <div class="mb-2">
-                            <input type="password" class="form-control py-2" name="pswd" id="pswd" style='border-radius:30px;' placeholder="Password"/>
-                        </div>
-                        <div class="mb-2">
-                            <button type='submit' class="form-control btn btn-warning" id="btnLogin" style='border-radius:30px;' onclick="return Login()">Login</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
+
+            
         </div>
 
 

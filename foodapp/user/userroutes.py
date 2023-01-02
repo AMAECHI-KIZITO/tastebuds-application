@@ -2,9 +2,12 @@
 import os,re,random,requests,json
 import schedule,time,threading
 from flask import render_template,request,flash,abort,make_response,redirect,session,jsonify
+from flask_mail import Mail, Message
 from datetime import datetime,date,timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import userobj
+# from .. import mail
+import foodapp
 from foodapp.models import *
 
            
@@ -496,25 +499,41 @@ def clearcache(response):
 @userobj.route('/category/<cat_id>')
 def category_selection(cat_id):
     shopping_ID = session.get('user_cart_id')
+    cat_info=db.session.query(Category).filter(Category.cat_id==cat_id).first() 
+    
     if shopping_ID!=None:
-        usercart=db.session.query(Temporarycart).filter(Temporarycart.user_temp_id==shopping_ID, Temporarycart.temp_cart_date==date.today()).count()
-        usercartdeets=db.session.query(Temporarycart).filter(Temporarycart.user_temp_id==shopping_ID, Temporarycart.temp_cart_date==date.today()).all()
-        rests=db.session.query(Restaurant).all()
-        
-        category=db.session.query(Category).all()
-        requested_cat_products=db.session.query(Product).filter(Product.prod_cat==cat_id).all() 
-        cat_info=db.session.query(Category).filter(Category.cat_id==cat_id).first() 
-        category_name=cat_info.cat_name
-        
-        
-        
-        if usercartdeets!=[]:
-            total=0
-            for i in usercartdeets:
-                total=total+i.amount
+        if cat_info != None:
+            usercart=db.session.query(Temporarycart).filter(Temporarycart.user_temp_id==shopping_ID, Temporarycart.temp_cart_date==date.today()).count()
+            usercartdeets=db.session.query(Temporarycart).filter(Temporarycart.user_temp_id==shopping_ID, Temporarycart.temp_cart_date==date.today()).all()
+            rests=db.session.query(Restaurant).all()
+            
+            category=db.session.query(Category).all()
+            requested_cat_products=db.session.query(Product).filter(Product.prod_cat==cat_id).all() 
+            cat_info=db.session.query(Category).filter(Category.cat_id==cat_id).first() 
+            category_name=cat_info.cat_name
+            
+            
+            
+            if usercartdeets!=[]:
+                total=0
+                for i in usercartdeets:
+                    total=total+i.amount
+            else:
+                total=0
+            
+            return render_template('category.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total, category=category, requested_cat_products=requested_cat_products, cat_id=cat_id, category_name=category_name)
         else:
-            total=0
-        
-        return render_template('category.html', rests=rests, usercart=usercart, usercartdeets=usercartdeets, total=total, category=category, requested_cat_products=requested_cat_products, cat_id=cat_id, category_name=category_name)
+            return render_template('category-not-found.html')
     else:
         return redirect('/user/')
+    
+
+# Mail testing
+@userobj.route('/mail/')
+def sendmail():
+    msg = Message("Confirm Email", sender=('Restaurant', 'ccmarketsgroup@gmail.com'), recipients=["konkakira1960@gmail.com"])
+    
+    msg.body='This is me testing out the stuff again'
+        
+    foodapp.mail.send(msg)
+    return 'mailsent'

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>{%block title%}Category Not Found{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='css/bootstrap.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='font/css/all.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='JQanimate.css')}}">
+        <link rel="icon" href="{{url_for('bpuser.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
+
+		<style type="text/css">
+            
+            
+        </style>
+    </head>
+    <body style='background-color:#FFF4C2'>
+        <div class="container-fluid">
+            <div class="row bg-dark">
+                
+                <div class="col">
+                    <h1 style="font-family:'lucida-calligraphy'; color:#FFF4C2">Tastebuds</h1>
+                </div>
+            </div>
+
+
+            <div class="row align-items-center"  style="min-height:534px;">
+                
+                <div class="col-6  mt-5">
+                    <img class="img-fluid" src="{{url_for('bpuser.static',filename='images/404.png')}}" alt="Page not found"/>
+                </div>
+
+                <div class="col-6 mt-5">
+                    <h3 class="text-center">Oops! Seems like you have lost your way.</h3>
+                    <p class="text-center"> The category you seek doesn't exist.</p>
+                    <p class="text-center"><button class='btn text-light' style="background-color:#704e2e;" onclick='history.go(-1)'>Back</button></p>
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>
