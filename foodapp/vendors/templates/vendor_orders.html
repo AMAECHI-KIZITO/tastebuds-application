@@ -2,83 +2,58 @@
 
 {% block title %} {{session.get('rest_name')}} Orders {% endblock title%}
 
-{%block content%}
+{% block content %}
 <!--Large Screens-->
-<div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
-    <div class="col-md-3" style='border-right:1px solid black;'>
-        <div class="row bigmenu">
-            <div class="col">
-                <ul class="nav flex-column nav-fill">
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/vendor-dashboard/" class="nav-link cust_dashboard_links">Dashboard</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/all/products/" class="nav-link cust_dashboard_links">All Products</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/add/products/" class="nav-link cust_dashboard_links">Add Products</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/logout/" class="nav-link cust_dashboard_links">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-9">
-        {% if restaurants_specific_ids_orders != [] %}
-        <div class='row'>
-            <div class="col">
-                <h2>Today's Orders</h2><hr>
-                <table class="table table-hover myTable">
-                    <thead>
+<div class="col-md-9">
+    {% if restaurants_specific_ids_orders != [] %}
+    <div class='row'>
+        <div class="col">
+            <h2>Today's Orders</h2><hr>
+            <table class="table table-hover myTable">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Customer</th>
+                        <th>Address</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in restaurants_specific_ids_orders%}
                         <tr>
-                            <th>S/N</th>
-                            <th>Customer</th>
-                            <th>Address</th>
-                            <th>Date</th>
-                            <th>Details</th>
+                            <td>{{loop.index}}</td>
+                            {% for a,b in x.items()%}
+                                {% if a == "order_id" %}
+                                    <td><a class="btn text-light btn-sm" style='background-color:#704e2e;' href="/vendor/orderdetails/{{b}}">Info</a></td>
+                                {% else%}
+                                    <td>{{b}}</td>
+                                {% endif %}
+                            {% endfor %}
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for x in restaurants_specific_ids_orders%}
-                            <tr>
-                                <td>{{loop.index}}</td>
-                                {% for a,b in x.items()%}
-                                    {% if a == "order_id" %}
-                                        <td><a class="btn text-light btn-sm" style='background-color:#704e2e;' href="/vendor/orderdetails/{{b}}">Info</a></td>
-                                    {% else%}
-                                        <td>{{b}}</td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        {% else %}
-        <div class="row">
-            <div class="col">
-                <h2>Today's Orders</h2><hr>
-            </div>
-        </div>
-        <div class="row align-items-center" style="min-height:400px">
-            <div class="col">
-                <h4 class="text-center">No Orders Available Today</h4>
-            </div>
-        </div>
-        {% endif %}
     </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <h2>Today's Orders</h2><hr>
+        </div>
+    </div>
+    <div class="row align-items-center" style="min-height:400px">
+        <div class="col">
+            <h4 class="text-center">No Orders Available Today</h4>
+        </div>
+    </div>
+    {% endif %}
 </div>
+{% endblock content %}
 
+
+
+{% block content2 %}
 <!--Small screens-->
 <div class="row d-md-none" style='background-color:#FFF4C2;'>
     {% if restaurants_specific_ids_orders != [] %}
@@ -124,4 +99,4 @@
     {% endif %}
 </div>
 
-{%endblock content%}
+{% endblock content2 %}

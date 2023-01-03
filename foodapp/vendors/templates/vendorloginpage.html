@@ -24,13 +24,13 @@
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
-                min-height: 700px
+                min-height: 600px
             }
 
 
             @media screen and (max-width:768px){
                 .vendor-login{
-                    min-height: 600px;
+                    min-height: 540px;
                 }
             }
         </style>
@@ -38,12 +38,17 @@
 
     <body>
         <div class="container-fluid">
-            
+            <div class="row bg-dark">
+                <div class="col">
+                    <h1 style="font-family:'lucida-calligraphy'; color:#FFF4C2">Tastebuds</h1>
+                </div>
+            </div>
+
             <div class='row vendor-login vendor_login-img'>
                 <div>
                     <div class='row'>
-                        <div class='col-md-6 offset-md-3'>
-                            <div style='background-color:rgba(0,0,0,0.7); font-family:"lucida calligraphy"'>
+                        <div class='col-md-6 offset-md-3 py-3' style='background-color:rgba(0,0,0,0.7); font-family:"lucida calligraphy"'>
+                            <div>
                                 <h1 class="text-center text-warning">Welcome</h1>
                                 <h2 class="text-center text-warning">Login to Continue</h2>
                             </div>
@@ -66,6 +71,7 @@
                                     <button type='submit' class="form-control btn btn-warning" id="btnLogin" style='border-radius:30px;' onclick="return Login()">Login</button>
                                 </div>
                             </form>
+                            <p class="text-center text-warning">Don't have a vendor account? <a href="/vendor/create-account/" style="text-decoration: none; color: #FFF4C2;"><b>Signup</b></a></p>
                         </div>
                     </div>
                 </div>

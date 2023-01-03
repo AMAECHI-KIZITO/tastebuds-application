@@ -248,8 +248,8 @@ def checkout_temporary_cart():
                 identity=""
                 for uniq in range(5):
                     identity = identity + random.choice(characterset) + random.choice(characterset2)    
-                reference=int(random.random()*1047700583)
-                reference2=int(random.random()*1583)
+                reference=int(random.random() * 1047700583)
+                reference2=int(random.random() * 1583)
                 txnref=str(reference) + identity + str(reference2)
             
             

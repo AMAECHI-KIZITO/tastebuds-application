@@ -3,73 +3,45 @@
 {% block title %} Order Details {% endblock title%}
 
 {%block content%}
-<!--Large Screens-->
-<div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
-    <div class="col-md-3" style='border-right:1px solid black;'>
-        <div class="row bigmenu">
-            <div class="col">
-                <ul class="nav flex-column nav-fill">
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/vendor-dashboard/" class="nav-link cust_dashboard_links">Dashboard</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/all/products/" class="nav-link cust_dashboard_links">All Products</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/add/products/" class="nav-link cust_dashboard_links">Add Products</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/logout/" class="nav-link cust_dashboard_links">Logout</a>
-                    </li>
-                </ul>
-            </div>
+<div class="col-md-9">
+    <div class='row'>
+        <div class="col">
+            <h2>Order Details</h2><hr>
+            <table class="table table-hover myTable">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                        <th>Delivery Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in order_details%}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{x.Ord_details_prod_info.prod_name}}</td>
+                            <td>{{x.prod_qty}}</td>
+                            <td>&#8358 {{"{:,.0f}".format(x.amount)}}</td>
+                            <td>{{x.delivery_status}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table><br>
         </div>
     </div>
 
-    <div class="col-md-9">
-        <div class='row'>
-            <div class="col">
-                <h2>Order Details</h2><hr>
-                <table class="table table-hover myTable">
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Amount</th>
-                            <th>Delivery Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for x in order_details%}
-                            <tr>
-                                <td>{{loop.index}}</td>
-                                <td>{{x.Ord_details_prod_info.prod_name}}</td>
-                                <td>{{x.prod_qty}}</td>
-                                <td>&#8358 {{"{:,.0f}".format(x.amount)}}</td>
-                                <td>{{x.delivery_status}}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table><br>
-            </div>
-        </div>
-
-        <!--Changing the delivery-->
-        <div class='row'>
-            <div class='col'>
-                <button class="btn text-light btn-sm float-end btn_DeliveryModal" data-bs-toggle="modal" data-bs-target="#change_delivery_status" style='background-color:#704e2e;'>Change Status</button>
-            </div>
+    <!--Changing the delivery-->
+    <div class='row'>
+        <div class='col'>
+            <button class="btn text-light btn-sm float-end btn_DeliveryModal" data-bs-toggle="modal" data-bs-target="#change_delivery_status" style='background-color:#704e2e;'>Change Status</button>
         </div>
     </div>
 </div>
+{%endblock content%}
 
+{% block content2 %}
 <!--Small screens-->
 <div class="row d-md-none" style='background-color:#FFF4C2;'>
     <div class='col-12 mt-1'>
@@ -102,7 +74,7 @@
         <button class="btn text-light btn-sm float-end btn_DeliveryModal" data-bs-toggle="modal" data-bs-target="#change_delivery_status" style='background-color:#704e2e;'>Change Status</button>
     </div>
 </div>
-{%endblock content%}
+{% endblock content2 %}
 
 
 {%block change_delivery_status_modal %}

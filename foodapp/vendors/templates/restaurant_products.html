@@ -18,81 +18,54 @@
 
 
 {%block content%}
-<!--Large Screens-->
-<div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
-    <div class="col-md-3" style='border-right:1px solid black;'>
-        <div class="row bigmenu">
-            <div class="col">
-                <ul class="nav flex-column nav-fill">
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/vendor-dashboard/" class="nav-link cust_dashboard_links">Dashboard</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/all/products/" class="nav-link cust_dashboard_links">All Products</a>
-                    </li> 
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/add/products/" class="nav-link cust_dashboard_links">Add Products</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/vendor/logout/" class="nav-link cust_dashboard_links">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-9">
-        {% if products != [] %}
-        <div class='row'>
-            <div class="col">
-                <h2>Products</h2><hr>
-                <table class="table table-hover myTable">
-                    <thead>
+<div class="col-md-9">
+    {% if products != [] %}
+    <div class='row'>
+        <div class="col">
+            <h2>Products</h2><hr>
+            <table class="table table-hover myTable">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price(&#8358;)</th>
+                        <th>Image</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in products%}
                         <tr>
-                            <th>S/N</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Price(&#8358;)</th>
-                            <th>Image</th>
-                            <th>Action</th>
+                            <td>{{loop.index}}</td>
+                            <td>{{x.prod_name}}</td>
+                            <td>{{x.product_category.cat_name}}</td>
+                            <td>{{"{:,.0f}".format(x.prod_price)}}</td>
+                            <td><img src="{{url_for('bpuser.static',filename='rest_prod_imgs/'+x.prod_image)}}" width='100px' height='100px'></td>
+                            <td><a href='/vendor/edit-product/{{x.prod_id}}' class='btn text-light btn-sm'style="background-color:#704E2E">Edit</a></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for x in products%}
-                            <tr>
-                                <td>{{loop.index}}</td>
-                                <td>{{x.prod_name}}</td>
-                                <td>{{x.product_category.cat_name}}</td>
-                                <td>{{"{:,.0f}".format(x.prod_price)}}</td>
-                                <td><img src="{{url_for('bpuser.static',filename='rest_prod_imgs/'+x.prod_image)}}" width='100px' height='100px'></td>
-                                <td><a href='/vendor/edit-product/{{x.prod_id}}' class='btn text-light btn-sm'style="background-color:#704E2E">Edit</a></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        {% else %}
-        <div class="row">
-            <div class="col">
-                <h2>Products</h2><hr>
-            </div>
-        </div>
-        <div class="row align-items-center" style="min-height:400px">
-            <div class="col">
-                <h4 class="text-center">No Products Available</h4>
-            </div>
-        </div>
-        {% endif %}
     </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <h2>Products</h2><hr>
+        </div>
+    </div>
+    <div class="row align-items-center" style="min-height:400px">
+        <div class="col">
+            <h4 class="text-center">No Products Available</h4>
+        </div>
+    </div>
+    {% endif %}
 </div>
+{% endblock content %}
 
+
+{% block content2 %}
 <!--Small screens-->
 <div class="row d-md-none" style='background-color:#FFF4C2;'>
     {% if restaurants_specific_ids_orders != [] %}
@@ -103,9 +76,9 @@
                 <tr>
                     <th>S/N</th>
                     <th>Name</th>
-                    <th>Category</th>
+                    {#<th>Category</th>#}
                     <th>Price(&#8358;)</th>
-                    <th>Image</th>
+                    {#<th>Image</th>#}
                     <th>Action</th>
                 </tr>
             </thead>
@@ -114,10 +87,10 @@
                     <tr>
                         <td>{{loop.index}}</td>
                         <td>{{x.prod_name}}</td>
-                        <td>{{x.product_category.cat_name}}</td>
+                        {#<td>{{x.product_category.cat_name}}</td>#}
                         <td>{{"{:,.0f}".format(x.prod_price)}}</td>
-                        <td><img src="{{url_for('bpuser.static',filename='rest_prod_imgs/'+x.prod_image)}}" width='40px' height='40px'></td>
-                        <td><a href='/vendor/edit-product/{{x.prod_id}}'>Edit</a></td>
+                        {#<td><img src="{{url_for('bpuser.static',filename='rest_prod_imgs/'+x.prod_image)}}" width='40px' height='40px'></td>#}
+                        <td><a href='/vendor/edit-product/{{x.prod_id}}' class='btn text-light btn-sm' style="text-decoration:none;  background-color:#704E2E">Edit</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -136,7 +109,7 @@
         
     {% endif %}
 </div>
-{%endblock content%}
+{% endblock content2 %}
 
 
 
