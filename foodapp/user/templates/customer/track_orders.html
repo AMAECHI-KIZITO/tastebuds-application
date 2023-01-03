@@ -9,72 +9,50 @@ Track Orders
 
 {%block content%}
 <!--Large Screens-->
-<div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
-    <div class="col-md-3" style='border-right:1px solid black;'>
-        <div class="row bigmenu">
-            <div>
-                <ul class="nav flex-column nav-fill">
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/myaccount/" class="nav-link cust_dashboard_links">Dashboard</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/all-transactions/" class="nav-link cust_dashboard_links">All Transactions</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/customer/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/logout/" class="nav-link cust_dashboard_links">Logout</a>
-                    </li>
-                </ul>
-            </div>
+<div class="col-md-9">
+    {% if today_orders != 0%}
+    <div class='row'>
+        <div class='col-12 mt-2'>
+            <table class="table table-hover myTable">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Ref Number</th>
+                        <th>Date Placed</th>
+                        <th>Amount(&#8358;)</th>
+                        <th>Order Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in orders%}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{x.ref_no}}</td>
+                        <td>{{x.order_date}}</td>
+                        <td>{{"{:,.0f}".format(x.order_amount)}}</td>
+                        <td>{{x.order_status}}</td>
+                        <td><a href='/user/order/details/{{x.order_id}}' class="btn btn-sm text-light" style="background-color:#704e2e;">Details</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <div class="col-md-9">
-        {% if today_orders != 0%}
-        <div class='row'>
-            <div class='col-12 mt-2'>
-                <table class="table table-hover myTable">
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Ref Number</th>
-                            <th>Date Placed</th>
-                            <th>Amount(&#8358;)</th>
-                            <th>Order Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for x in orders%}
-                        <tr>
-                            <td>{{loop.index}}</td>
-                            <td>{{x.ref_no}}</td>
-                            <td>{{x.order_date}}</td>
-                            <td>{{"{:,.0f}".format(x.order_amount)}}</td>
-                            <td>{{x.order_status}}</td>
-                            <td><a href='/user/order/details/{{x.order_id}}' class="btn btn-sm text-light" style="background-color:#704e2e;">Details</a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    {% else %}
+    <div class=" row align-items-center " style="min-height:400px;">
+        <div class="col-12">
+            <h2 class="text-center" style="font-family:'lucida-calligraphy';">No orders placed today</h2>
+            <p class="text-center"><a href="/user/" class="btn text-light" style="background-color:#704e2e;">Shop</a></p>
         </div>
-        {% else %}
-        <div class=" row align-items-center " style="min-height:400px;">
-            <div class="col-12">
-                <h2 class="text-center" style="font-family:'lucida-calligraphy';">No orders placed today</h2>
-                <p class="text-center"><a href="/user/" class="btn text-light" style="background-color:#704e2e;">Shop</a></p>
-            </div>
-        </div>
-        {% endif %}
     </div>
+    {% endif %}
 </div>
+{%endblock content%}
 
+
+
+{% block content2 %}
 <!--Small screens-->
 <div class="row d-md-none" style='background-color:#FFF4C2; min-height:400px'>
     <div class='col-12 mt-3'>
@@ -105,6 +83,7 @@ Track Orders
                 </table>
             </div>
         </div>
+
         {% else %}
         <div class=" row align-items-center " style="min-height:400px;">
             <div class="col-12">
@@ -115,7 +94,7 @@ Track Orders
         {% endif %}
     </div>
 </div>
-{%endblock content%}
+{% endblock content2 %}
 
 
 {%block scripts%}

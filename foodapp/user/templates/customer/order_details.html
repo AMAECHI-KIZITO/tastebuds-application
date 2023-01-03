@@ -5,69 +5,44 @@ Order Details
 {%endblock title%}
 
 {% block style %}
-
 {% endblock style %}
 
 
 {%block content%}
 <!--Large Screens-->
-<div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
-    <div class="col-md-3" style='border-right:1px solid black;'>
-        <div class="row bigmenu">
-            <div class="col">
-                <ul class="nav flex-column nav-fill">
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/myaccount/" class="nav-link cust_dashboard_links">Dashboard</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/today-orders/" class="nav-link cust_dashboard_links">Track Today's Orders</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/all-transactions/" class="nav-link cust_dashboard_links">All Transactions</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/customer/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
-                    </li>
-                    <li class="nav-item navig mb-1">
-                        <a href="/user/logout/" class="nav-link cust_dashboard_links">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-9">
-        <div class='row'>
-            <div class='col-12 mt-2'>
-                <table class="table table-hover myTable">
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Amount(&#8358;)</th>
-                            <th>Restaurant</th>
-                            <th>Delivery Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for x in details%}
-                        <tr>
-                            <td>{{loop.index}}</td>
-                            <td>{{x.Ord_details_prod_info.prod_name}}</td>
-                            <td>{{x.prod_qty}}</td>
-                            <td>{{"{:,.0f}".format(x.amount)}}</td>
-                            <td>{{x.Order_rest_info.rest_name}}</td>
-                            <td>{{x.delivery_status}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+<div class="col-md-9">
+    <div class='row'>
+        <div class='col-12 mt-2'>
+            <table class="table table-hover myTable">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Amount(&#8358;)</th>
+                        <th>Restaurant</th>
+                        <th>Delivery Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in details%}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{x.Ord_details_prod_info.prod_name}}</td>
+                        <td>{{x.prod_qty}}</td>
+                        <td>{{"{:,.0f}".format(x.amount)}}</td>
+                        <td>{{x.Order_rest_info.rest_name}}</td>
+                        <td>{{x.delivery_status}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+{%endblock content%}
 
+{%block content2%}
 <!--Small screens-->
 <div class="row d-md-none" style='background-color:#FFF4C2; min-height:400px'>
     <div class='col-12 mt-3'>
@@ -101,7 +76,7 @@ Order Details
         </div>
     </div>
 </div>
-{%endblock content%}
+{%endblock content2%}
 
 
 

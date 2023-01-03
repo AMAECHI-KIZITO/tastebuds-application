@@ -14,8 +14,6 @@
         <link rel="stylesheet" type="text/css" href="{{url_for('bpuser.static',filename='DataTables/datatables.min.css')}}">
         
 		<style type="text/css">
-            
-
             .topside{
                 background-color:#000;
             }
@@ -85,15 +83,15 @@
                 </div>
                 <div class="col-2">
                     <button type="button" class="btn btn-sm d-md-none" data-bs-toggle="offcanvas" data-bs-target="#customers_menu">
-                        <i class="fa-solid fa-bars fa-2x"></i>
+                        <i class="fa-solid fa-bars fa-2x" style="color:#EBF8A4"></i>
                     </button>
                 </div>
             </div>
             {%endblock navigation%}
 
-            {%block content%}
+            
             <!--Large Screens-->
-            <div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:500px;'>
+            <div class="row d-none d-md-flex"  style='background-color:#FFF4C2; min-height:550px;'>
                 <div class="col-md-3" style='border-right:1px solid black;'>
                     <div class="row bigmenu">
                         <div class="col">
@@ -118,8 +116,9 @@
                     </div>
                 </div>
 
+                {%block content%}
                 <div class="col-md-9">
-                    <div class='row align-items-center' style="min-height:400px; color:#FFF">
+                    <div class='row align-items-center' style="min-height:570px; color:#FFF">
                         <div class='col-4 offset-1 info py-5'>
                             <p class="text-center">NUMBER OF ORDERS</p>
                             <p class="text-center" style="font-family:'lucida-calligraphy'; color:#EBF8A4">{{order_numbers}}</p>
@@ -130,8 +129,10 @@
                         </div>
                     </div>
                 </div>
+                {%endblock content%}
             </div>
 
+            {%block content2%}
             <!--Small screens-->
             <div class="row d-md-none align-items-center" style='background-color:#FFF4C2; min-height:400px'>
                 <div class='col-12 mt-3'>
@@ -144,58 +145,11 @@
                 </div>
             </div>
 
-            {%endblock content%}
+            {%endblock content2%}
         </div>
                 
 
-        {%block footer%}
-        <!--Footer-->
-        {#<div class='row align-items-center pt-3' style="background-color:#704e2e; color:#fff">
-            <div class='col-md-5'>
-                <p class="text-center"><img src="{{url_for('bpuser.static', filename='images/tastebuds.png')}}" class='img-fluid' width="200px" height="200px"></p>
-            </div>
-            <div class='col-md-7'>
-                <div class='row'>
-                    <div class="col-md-3 mb-3">
-                        <h5>Information</h5><br>
-                        <a href='/user/' class="d-block links">Home</a>
-                        <a href="#" class="d-block links">Categories</a>
-                        <a href='/contact-us/' class="d-block links">Contact Us</a>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <h5>Account</h5><br>
-                        <a href='/user/account/' class="d-block links">Login/Register</a>
-                        {%if session.get('customer_name')!=None and session.get('customer_id')!=None%}
-                        <a href='/user/myaccount/' class="d-block links">Track Orders</a>
-                        {%endif%}
-                        <a href='/user/logout/' class="d-block links">Logout</a>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <h5>Follow us</h5><br>
-                        <div class="row">
-                            <div class="col-1">
-                                <a class="d-block links" href='#'><i class="fa-brands fa-facebook-f"></i></a>
-                            </div>
-                            <div class="col-1">
-                                <a class="d-block links" href='#'><i class='fa-brands fa-instagram'></i></a>
-                            </div>
-                            <div class="col-1">
-                                <a class="d-block links" href='#'><i class='fa-brands fa-whatsapp'></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class='row'>
-                <div class='col-12'>
-                    <p class='text-center' style='font-size:12px'>&copy; Developed by Amaechi. All rights reserved</p>
-                </div>
-            </div>
-        </div>#}
-        {%endblock footer%}
-
-
+        
 
 
         {% block customer_menu %}
