@@ -163,22 +163,21 @@
                 <div class='col-md-7'>
                     <div class='row'>
                         <div class="col-md-3 mb-3">
-                            <h5>Information</h5><br>
+                            <h6>Information</h6><br>
                             <a href='/user/' class="d-block links">Home</a>
-                            <a href="#" class="d-block links">Categories</a>
                             <a href='/contact-us/' class="d-block links">Contact Us</a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <h5>Account</h5><br>
+                            <h6>Account</h6><br>
                             <a href='/user/account/' class="d-block links">Login/Register</a>
                             <a href='/vendor/' class="d-block links">For Vendors</a>
                             {%if session.get('customer_name')!=None and session.get('customer_id')!=None%}
                             <a href='/user/myaccount/' class="d-block links">Track Orders</a>
-                            {%endif%}
                             <a href='/user/logout/' class="d-block links">Logout</a>
+                            {%endif%}
                         </div>
                         <div class="col-md-3 mb-3">
-                            <h5>Follow us</h5><br>
+                            <h6>Follow us</h6><br>
                             <div class="row">
                                 <div class="col-1">
                                     <a class="d-block links" href='#'><i class="fa-brands fa-facebook-f text-primary"></i></a>

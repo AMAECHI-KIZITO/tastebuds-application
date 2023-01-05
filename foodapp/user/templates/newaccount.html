@@ -13,34 +13,37 @@ TasteBuds - Register
         <h2 class="text-center" style="font-family: 'lucida-calligraphy'; border-bottom: 1px solid black; color: #704e2e;">Create an Account for your Tastebuds</h2>
         <div id="signupfeedback"></div>
         <form id="signupform">
-            <div class="mb-3">
+            <div class="mb-2">
                 <label for='firstname' class="form-label" style="color: #704e2e;"><b>Firstname</b></label>
                 <input type='text' class='form-control' name='firstname' id='firstname' required>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <label for='lastname' class="form-label" style="color: #704e2e;"><b>Lastname</b></label>
                 <input type='text' class='form-control' name='lastname' id='lastname' required>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <label for='phone' class="form-label" style="color: #704e2e;"><b>Phone</b></label>
                 <input type='text' class='form-control' name='phone' id='phone' required>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <label for='email' class="form-label" style="color: #704e2e;"><b>Email Address</b></label>
                 <input type='email' class='form-control' name='email' id='email' required>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <label for='password' class="form-label" style="color: #704e2e;"><b>Password</b></label>
                 <input type='password' class='form-control' name='password' id='password' required>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <input type='hidden' class='form-control' name='csrf_token' id='csrf_token' value="{{csrf_token()}}">
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <button type="button" class="btn text-light form-control" style='background-color:#704e2e' id="btnCreateAcct">Create Account</button>
             </div>
         </form>
         <p class="text-center">Already have an account? <a href="/user/login/" style="text-decoration: none; color: #704e2e;"><b>Login</b></a></p>
+    </div>
+    <div class="col-md-6 d-md-none d-flex">
+        <img class="img-fluid img-thumbnail" src="{{url_for("bpuser.static",filename="images/amala.jpg")}}">
     </div>
 </div>
 {%endblock content%}

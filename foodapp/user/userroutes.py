@@ -6,7 +6,6 @@ from flask_mail import Mail, Message
 from datetime import datetime,date,timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import userobj
-# from .. import mail
 import foodapp
 from foodapp.models import *
 

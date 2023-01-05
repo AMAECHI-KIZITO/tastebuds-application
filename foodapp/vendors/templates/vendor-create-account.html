@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>{%block title%}Vendor - Create Account{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="author" content="Amaechi Tochukwu">
+		<meta name="keywords" content="Affordable Meals in Nigeria, Restaurants in Nigeria, Online food vendors, Online restorants, cheap meals in Nigeria">
+		<meta name="description" content="Buy delicious foods from Tastebuds at great prices.">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='css/bootstrap.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='font/css/all.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('bpvendor.static',filename='JQanimate.css')}}">
+        <link rel="icon" href="{{url_for('bpvendor.static',filename='images/tastebud_favicon.ico')}}" type="image/x-icon">
+        
+		<style type="text/css">
+            body{
+                background-color:#FFF4C2;
+                color: #ffffff;
+            }
+            .vendor_reg {
+                display:flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 600px;
+            }
+            
+            .links{
+				text-decoration: none;
+				color: #fff;
+			}
+            .links:hover,
+            .links.active {
+				color: orange;
+			}
+            @media screen and (max-width:768px){
+                .vendor_reg{
+                    min-height: 540px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row bg-dark">
+                <div class="col">
+                    <h1 style="font-family:'lucida-calligraphy'; color:#FFF4C2">Tastebuds</h1>
+                </div>
+            </div>
+
+
+            <div class="row pt-3 vendor_reg ">
+                <div class="col-md-6 d-none d-md-flex">
+                    <img class="img-fluid img-thumbnail" src="{{url_for("bpvendor.static",filename="images/fine-dining2.jpg")}}">
+                </div>
+                <div class="col-md-6">
+                    {%set notReg=get_flashed_messages(category_filter='bad_rest_reg')%}
+                    {%for i in notReg%}
+                        <div class="alert alert-danger">{{i}}</div>
+                    {%endfor%}
+                                
+                    {%set goodReg=get_flashed_messages(category_filter='Good_rest_reg')%}
+                    {%for x in goodReg%}
+                        <div class="alert alert-success">{{x}}</div>
+                    {%endfor%}
+                    <div class="py-3">
+                        <h2 class="text-center" style="font-family: 'lucida-calligraphy'; border-bottom: 1px solid black; color: #704e2e;">Create Your Vendor Account</h2>
+                    </div>
+
+                    <div id="new_rest_Feedback"></div>
+
+
+                    <form class="row row-cols-sm-2" action="/vendor/register-business/" method="post" enctype="multipart/form-data" style="color: #704e2e;">
+                        <div class="col-12 mb-2">
+                            <label for="restaurantName" class="form-label">Restaurant Name</label>
+                            <input type="text" class="form-control" name='restaurantName' id="restaurantName">
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="restaurantPhone" class="form-label">Restaurant Phone</label>
+                            <input type="text" class="form-control" name='restaurantPhone' id="restaurantPhone">
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="restaurantEmail" class="form-label">Restaurant Email</label>
+                            <input type="text" class="form-control" name='restaurantEmail' id="restaurantEmail">
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="restaurantAbout" class="form-label">Restaurant About</label>
+                            <input type="text" class="form-control" name='restaurantAbout' id="restaurantAbout">
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="restaurantPic" class="form-label">Business Logo</label>
+                            <input type="file" class="form-control" name='restaurantPic' id="restaurantPic">
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="restaurantAddress" class="form-label">Restaurant Address</label>
+                            <input type="text" class="form-control" name='restaurantAddress' id="restaurantAddress">
+                        </div>
+                        <div class="mb-2 d-none">
+                            <input type="hidden" class="form-control" name='csrf_token' id="csrf_token" value="{{csrf_token()}}">
+                        </div>
+                        <button type"button" class="btn text-light form-control" style='background-color:#704e2e'  id="btnRegRestaurant" onclick="register(event)">Register</button>
+                    </form>
+                </div>
+                <div class="col-md-6 d-md-none d-flex">
+                    <img class="img-fluid img-thumbnail" src="{{url_for("bpvendor.static",filename="images/fine-dining2.jpg")}}">
+                </div>
+            </div>
+
+            {%block footer%}
+            <!--Footer-->
+            <div class='row align-items-center pt-3' style="background-color:#704e2e; color:#fff">
+                <div class='col-md-5'>
+                    <p class="text-center"><img src="{{url_for('bpuser.static', filename='images/tastebuds.png')}}" class='img-fluid' width="200px" height="200px"></p>
+                </div>
+                <div class='col-md-7'>
+                    <div class='row'>
+                        <div class="col-md-3 mb-3">
+                            <h6>Information</h6><br>
+                            <a href='/user/' class="d-block links">Home</a>
+                            <a href='/contact-us/' class="d-block links">Contact Us</a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h6>Account</h6><br>
+                            <a href='/user/account/' class="d-block links">Login/Register</a>
+                            <a href='/vendor/' class="d-block links">For Vendors</a>
+                            {%if session.get('customer_name')!=None and session.get('customer_id')!=None%}
+                            <a href='/user/myaccount/' class="d-block links">Track Orders</a>
+                            <a href='/user/logout/' class="d-block links">Logout</a>
+                            {%endif%}
+                            
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h6>Follow us</h6><br>
+                            <div class="row">
+                                <div class="col-1">
+                                    <a class="d-block links" href='#'><i class="fa-brands fa-facebook-f text-primary"></i></a>
+                                </div>
+                                <div class="col-1">
+                                    <a class="d-block links" href='#'><i class='fa-brands fa-instagram' style='color:#8a3ab9;'></i></a>
+                                </div>
+                                <div class="col-1">
+                                    <a class="d-block links" href='#'><i class='fa-brands fa-whatsapp text-success'></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class='row'>
+                    <div class='col-12'>
+                        <p class='text-center' style='font-size:12px'>&copy; Developed by Amaechi. All rights reserved</p>
+                    </div>
+                </div>
+            </div>
+            {%endblock footer%}
+        </div>
+
+
+
+        {%autoescape false%}
+        <script type="text/javascript" src="{{url_for('bpvendor.static',filename='jquery/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('bpvendor.static',filename='js/bootstrap.bundle.js')}}"></script>
+
+
+        {%block scripts%}
+            <script type='text/javascript'>
+                function register(e){
+                    var image = document.getElementById('restaurantPic').value;
+                    var Rname = document.getElementById('restaurantName').value;
+                    var Rphone = document.getElementById('restaurantPhone').value;
+                    var Remail = document.getElementById('restaurantEmail').value;
+                    var Rabout = document.getElementById('restaurantAbout').value;
+                    var Raddress = document.getElementById('restaurantAddress').value;
+            
+                    if(image==""||Rname==""||Rphone==""||Remail==""||Rabout==""||Raddress==""){
+                        $('#new_rest_Feedback').addClass('alert alert-danger');
+                        $('#new_rest_Feedback').text('Please complete all fields');
+                        e.preventDefault();
+                    }
+                }
+            </script>
+        {%endblock scripts%}
+
+        {%endautoescape%}
+    </body>
+</html>

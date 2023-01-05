@@ -22,8 +22,10 @@ class Restaurant(db.Model):
     rest_email=db.Column(db.String(200), nullable=False, unique=True)
     rest_about=db.Column(db.Text(500), nullable=False)
     rest_img=db.Column(db.String(80), nullable=False)
-    rest_reg_date=db.Column(db.Date(), nullable=False, default=date.today())
     rest_pswd=db.Column(db.String(200),nullable=False)
+    account_number = db.Column(db.String(10), nullable=True)
+    verify_account = db.Column(db.Enum("True","False"), nullable=False, default='False')
+    rest_reg_date=db.Column(db.Date(), nullable=False, default=date.today())
     
         
 class Admin(db.Model):
