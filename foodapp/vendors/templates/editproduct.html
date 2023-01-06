@@ -12,8 +12,11 @@
 {%block content%}
 <!--Large Screens-->
 <div class="col-md-9">
-    <div class='row'>
-        <div class="col-6 offset-3">
+    <div class='row align-items-center'>
+        <div class="col-6">
+            <p class="text-center"><img class="img-fluid img-thumbnail" src="{{url_for('bpuser.static',filename='rest_prod_imgs/'+products.prod_image)}}" alt="Picture of {{products.prod_name}}"/></p>
+        </div>
+        <div class="col-6 my-3">
             <h2>Product Edit</h2><hr>
             <p id="Feedback">Fields marked * are required</p>
             <form id='editProduct' enctype="multipart/form-data">
@@ -70,9 +73,13 @@
 {%block content2%}
 <!--Small screens-->
 <div class="row d-md-none" style='background-color:#FFF4C2;'>
+    
     <div class='col-12 mt-1'>
         <h2>Product Edit</h2><hr>
         <p id="smallScreenFeedback">Fields marked * are required</p>
+        <div>
+            <p class="text-center"><img class="img-fluid img-thumbnail" src="{{url_for('bpuser.static',filename='rest_prod_imgs/'+products.prod_image)}}" alt="Picture of {{products.prod_name}}"/></p>
+        </div>
         <form id='smallScreenEditProduct' enctype="multipart/form-data">
             <div class="d-none">
                 <input type='number' name='smallScreenProduct_id' id='smallScreenProduct_id' value='{{products.prod_id}}' class="form-control"/>
@@ -84,17 +91,17 @@
                 <input type="text" name="csrf_token" id='csrf_token' value="{{csrf_token()}}" class="form-control">
             </div>
             <div class='mb-2'>
-                <label><b>Product Name</b></label>
+                <label><b>Product Name * </b></label>
                 <input type="text" name="smallScreenProductName" id='smallScreenProductName' value="{{products.prod_name}}" class="form-control">
                 <p id='nameSmallScreenFeedback' style="font-size:12px"></p>
             </div>
             <div class='mb-2'>
-                <label><b>Product Price</b></label>
+                <label><b>Product Price * </b></label>
                 <input type="text" name="smallScreenProductPrice" id='smallScreenProductPrice' value="{{products.prod_price}}" class="form-control">
                 <p id='priceSmallScreenFeedback' style="font-size:12px"></p>
             </div>
             <div class='mb-2'>
-                <label><b>Product Category</b></label>
+                <label><b>Product Category * </b></label>
                 <select class="form-select" id='smallScreenProductCategory' name="smallScreenProductCategory">
                     <option value='#'>Select a category</option>
                     {% for cat in category%}
@@ -108,12 +115,12 @@
                 <p id='categorySmallScreenFeedback' style="font-size:12px"></p>
             </div>
             <div class='mb-2'>
-                <label><b>Product Image</b></label>
+                <label><b>Product Image *</b></label>
                 <input type="file" name="smallScreenProductImg" id='smallScreenProductImg' class="form-control">
                 <p id='imgSmallScreenFeedback' style="font-size:12px"></p>
             </div>
             <div class='mb-2'>
-                <label><b>Description</b></label>
+                <label><b>Description *</b></label>
                 <textarea class="form-control" name='smallScreenProductDesc' id='smallScreenProductDesc' placeholder='{{products.prod_description}}'></textarea>
                 <p id='descSmallScreenFeedback' style="font-size:12px"></p>
             </div>

@@ -13,82 +13,77 @@
 <div class="col-md-9">
     <div class='row'>
         <div class="col-6 offset-3">
-            <h2>Product Edit</h2><hr>
-            <p id="Feedback">Fields marked * are required</p>
-            <form id='editProduct' enctype="multipart/form-data">
-                <div class="d-none">
-                    <input type='hidden' name='product_id' id='product_id' value='{{products.prod_id}}' class="form-control"/>
-                </div>
-                <div class="d-none">
-                    <input type='hidden' name='restID' id='restID' value='{{session.get("restaurant_id")}}' class="form-control"/>
-                </div>
+            <h2>Add New Product</h2><hr>
+            <p id="Feedback">All fields are required</p>
+            <form id='addNewProduct' enctype="multipart/form-data">
                 <div class="d-none">
                     <input type="hidden" name="csrf_token" id='csrf_token' value="{{csrf_token()}}" class="form-control"/>
                 </div>
-                <div class='mb-2'>
-                    <label><b>Product Name *</b></label>
-                    <input type="text" name="product_name" id='product_name' value="{{products.prod_name}}" class="form-control"/>
-                    <p id='nameFeedback' style="font-size:12px"></p>
+                <div class='mb-1'>
+                    <label><b>Product Name</b></label>
+                    <input type="text" name="productName" id='product_name' class="form-control"/>
+                    <small id='nameFeedback'></small>
                 </div>
-                <div class='mb-2'>
-                    <label><b>Product Price *</b></label>
-                    <input type="text" name="product_price" id='product_price' value="{{products.prod_price}}" class="form-control">
-                    <p id='priceFeedback' style="font-size:12px"></p>
+                <div class='mb-1'>
+                    <label><b>Product Price (&#8358;)</b></label>
+                    <input type="text" name="productPrice" id='product_price' class="form-control">
+                    <small id='priceFeedback'></small>
                 </div>
-                <div class='mb-2'>
-                    <label><b>Product Category *</b></label>
-                    <select class="form-select" id='product_category' name="product_category">
+                <div class='mb-1'>
+                    <label><b>Product Category</b></label>
+                    <select class="form-select" id='product_category' name="productCategory">
                         <option value='#'>Select a category</option>
                         {% for cat in category%}
                         <option value='{{cat.cat_id}}'>{{cat.cat_name}}</option>
                         {% endfor %}
                     </select>
-                    <p id='categoryFeedback' style="font-size:12px"></p>
+                    <small id='categoryFeedback'></small>
                 </div>
-                <div class='mb-2'>
-                    <label><b>Product Image *</b></label>
-                    <input type="file" name="product_img" id='product_img' class="form-control">
-                    <p id='imageFeedback' style="font-size:12px"></p>
+                <div class='mb-1'>
+                    <label><b>Product Image</b></label>
+                    <input type="file" name="productImage" id='product_img' class="form-control">
+                    <small id='imageFeedback'></small>
                 </div>
-                <div class='mb-2'>
-                    <label><b>Description *</b></label>
-                    <textarea class="form-control" name='product_desc' id='product_desc' placeholder='{{products.prod_description}}' value="{{products.prod_description}}" ></textarea>
-                    <p id='descFeedback' style="font-size:12px"></p>
+                <div class='mb-1'>
+                    <label><b>Description</b></label>
+                    <textarea class="form-control" name='productDescription' id='product_desc'></textarea>
+                    <small id='descFeedback'></small>
                 </div>
-                <button type="button" id='btnEditProduct' class="btn btn-sm text-light mt-2 float-end" style='background-color:#704e2e;'>Proceed</button>
+                <button type="button" id='btnAddProduct' class="btn btn-sm text-light mt-2 float-end" style='background-color:#704e2e;'>Add Product</button>
+                <button type="reset" id='btnResetProductForm' class="btn btn-sm text-light mt-2 float-end d-none" style='background-color:#704e2e;'>Reset</button>
             </form>
         </div>
     </div>
 </div>
 {%endblock content%}
 
+
+
+
+
+
+
 {%block content2%}
 <!--Small screens-->
 <div class="row d-md-none" style='background-color:#FFF4C2;'>
     <div class='col-12 mt-1'>
-        <h2>Product Edit</h2><hr>
-        <p id="smallScreenFeedback">Fields marked * are required</p>
-        <form id='smallScreenEditProduct' enctype="multipart/form-data">
-            <div class="d-none">
-                <input type='number' name='smallScreenProduct_id' id='smallScreenProduct_id' value='{{products.prod_id}}' class="form-control"/>
-            </div>
-            <div class="d-none">
-                <input type='number' name='smallScreenRestID' id='smallScreenRestID' value='{{session.get("restaurant_id")}}' class="form-control"/>
-            </div>
+        <h2>Add New Product</h2><hr>
+        <p id="smallScreenFeedback">All fields are required</p>
+        <form id='smallScreenAddProduct' enctype="multipart/form-data">
             <div class="d-none">
                 <input type="text" name="csrf_token" id='csrf_token' value="{{csrf_token()}}" class="form-control">
             </div>
-            <div class='mb-2'>
+            <div class='mb-1'>
                 <label><b>Product Name</b></label>
-                <input type="text" name="smallScreenProductName" id='smallScreenProductName' value="{{products.prod_name}}" class="form-control">
-                <p id='nameSmallScreenFeedback' style="font-size:12px"></p>
+                <input type="text" name="smallScreenProductName" id='smallScreenProductName' class="form-control">
+                <small id='nameSmallScreenFeedback'></small>
             </div>
-            <div class='mb-2'>
-                <label><b>Product Price</b></label>
-                <input type="text" name="smallScreenProductPrice" id='smallScreenProductPrice' value="{{products.prod_price}}" class="form-control">
-                <p id='priceSmallScreenFeedback' style="font-size:12px"></p>
+            <div class='mb-1'>
+                <label><b>Product Price (&#8358;)</b></label>
+                <input type="text" name="smallScreenProductPrice" id='smallScreenProductPrice' class="form-control">
+                <small id='priceSmallScreenFeedback'></small>
             </div>
-            <div class='mb-2'>
+            <div class='mb-1'>
                 <label><b>Product Category</b></label>
                 <select class="form-select" id='smallScreenProductCategory' name="smallScreenProductCategory">
                     <option value='#'>Select a category</option>
@@ -96,19 +91,21 @@
                     <option value='{{cat.cat_id}}'>{{cat.cat_name}}</option>
                     {% endfor %}
                 </select>
-                <p id='categorySmallScreenFeedback' style="font-size:12px"></p>
+                <small id='categorySmallScreenFeedback'></small>
             </div>
-            <div class='mb-2'>
+            <div class='mb-1'>
                 <label><b>Product Image</b></label>
                 <input type="file" name="smallScreenProductImg" id='smallScreenProductImg' class="form-control">
-                <p id='imgSmallScreenFeedback' style="font-size:12px"></p>
+                <small id='imgSmallScreenFeedback'></small>
             </div>
-            <div class='mb-2'>
+            <div class='mb-1'>
                 <label><b>Description</b></label>
-                <textarea class="form-control" name='smallScreenProductDesc' id='smallScreenProductDesc' placeholder='{{products.prod_description}}'></textarea>
-                <p id='descSmallScreenFeedback' style="font-size:12px"></p>
+                <textarea class="form-control" name='smallScreenProductDesc' id='smallScreenProductDesc' ></textarea>
+                <small id='descSmallScreenFeedback'></small>
             </div>
-            <button type="button" id='btnSmallScreenEditProduct' class="btn btn-sm text-light mt-2 float-end" style='background-color:#704e2e;'>Proceed</button>
+            <button type="button" id='btnSmallScreenAddProduct' class="btn btn-sm text-light mt-2 float-end" style='background-color:#704e2e;'>Add Product</button>
+
+            <button type="reset" id='btnResetSmallScreenAddProduct' class="btn btn-sm text-light mt-2 float-end d-none" style='background-color:#704e2e;'>Add Product</button>
         </form>
     </div>
 </div>
@@ -117,15 +114,8 @@
 
 {%block scripts%}
     <script type='text/javascript'>
-        // For Big Screens Update Product
-        $('#product_img').keyup(function(){
-            if( $(this).val()=="" ){
-                $('#imageFeedback').text("This field is required");
-                $('#imageFeedback').css("color", "red");
-            }else{
-                $('#imageFeedback').text('');
-            }
-        })
+        // For Big Screens Add Product
+        
         $('#product_name').keyup(function(){
             if( $(this).val()=="" ){
                 $('#nameFeedback').text("This field is required");
@@ -142,15 +132,8 @@
                 $('#priceFeedback').text('');
             }
         })
-        $('#product_desc').keyup(function(){
-            if( $(this).val()=="" ){
-                $('#descFeedback').text("This field is required");
-                $('#descFeedback').css("color", "red");
-            }else{
-                $('#descFeedback').text('');
-            }
-        })
-        $('#product_category').keyup(function(){
+
+        $('#product_category').change(function(){
             if( $(this).val()=="#" ){
                 $('#categoryFeedback').text("This field is required");
                 $('#categoryFeedback').css("color", "red");
@@ -159,14 +142,33 @@
             }
         })
 
+        $('#product_img').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#imageFeedback').text("This field is required");
+                $('#imageFeedback').css("color", "red");
+            }else{
+                $('#imageFeedback').text('');
+            }
+        })
+        
+        $('#product_desc').keyup(function(){
+            if( $(this).val()=="" ){
+                $('#descFeedback').text("This field is required");
+                $('#descFeedback').css("color", "red");
+            }else{
+                $('#descFeedback').text('');
+            }
+        })
+        
 
 
-        $('#btnEditProduct').click(function(){
-            var form = document.getElementById('editProduct')
+
+        $('#btnAddProduct').click(function(){
+            var form = document.getElementById('addNewProduct')
             var formdata= new FormData(form)
             $.ajax({
                 
-                url:"/vendor/update/product/",
+                url:"/vendor/submit/product/",
                 data:formdata,
                 dataType:"text",
                 type:"post",
@@ -175,15 +177,15 @@
                 contentType:false,
                 beforeSend:function(){
                     if( $('#product_name').val()=="" || $('#product_desc').val()=="" || $('#product_img').val()=="" || $('#product_category').val()=="#" || $('#product_price').val()==""){
-                        alert('Fill out all fields')
+                        alert('One or more fields incorrectly filled. Please fill out all fields')
                         return false;
                     };
                 },
                 success:function(rsp){
-                    if( rsp =='Update Successful' ){
+                    if( rsp =='Product added successfully' ){
                         $('#Feedback').addClass("alert alert-success");
                         $('#Feedback').text(rsp);
-                        $('#btnEditProduct').prop('disabled', true)
+                        $('#btnResetProductForm').click();
                     }
                     else{
                         $('#Feedback').removeClass("alert alert-success");
@@ -217,7 +219,7 @@
                 $('#priceSmallScreenFeedback').text('');
             }
         })
-        $('#smallScreenProductCategory').keyup(function(){
+        $('#smallScreenProductCategory').change(function(){
             if( $(this).val()=="#" ){
                 $('#categorySmallScreenFeedback').text("This field is required");
                 $('#categorySmallScreenFeedback').css("color", "red");
@@ -244,12 +246,12 @@
 
 
 
-        $('#btnSmallScreenEditProduct').click(function(){
-            var form = document.getElementById('smallScreenEditProduct')
+        $('#btnSmallScreenAddProduct').click(function(){
+            var form = document.getElementById('smallScreenAddProduct')
             var formdata= new FormData(form)
             $.ajax({
                 
-                url:"/vendor/update-product/",
+                url:"/vendor/product-submission/",
                 data:formdata,
                 dataType:"text",
                 type:"post",
@@ -258,15 +260,15 @@
                 contentType:false,
                 beforeSend:function(){
                     if( $('#smallScreenProductName').val()=="" || $('#smallScreenProductDesc').val()=="" || $('#smallScreenProductImg').val()=="" || $('#smallScreenProductCategory').val()=="#" || $('#smallScreenProductPrice').val()==""){
-                        alert('Fill out all fields')
+                        alert('One or more fields incorrectly filled. Please fill out all fields')
                         return false;
                     };
                 },
                 success:function(rsp){
-                    if( rsp =='Update Successful' ){
+                    if( rsp =='Product added successfully' ){
                         $('#smallScreenFeedback').addClass("alert alert-success");
                         $('#smallScreenFeedback').text(rsp);
-                        $('#btnSmallScreenEditProduct').prop('disabled', true)
+                        $('#btnResetSmallScreenAddProduct').click();
                     }
                     else{
                         $('#smallScreenFeedback').removeClass("alert alert-success");

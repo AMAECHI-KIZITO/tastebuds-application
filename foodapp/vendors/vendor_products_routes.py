@@ -108,3 +108,88 @@ def vendor_update_products_small_screens():
             return "Fill Out All Fields"
     else:
         return redirect("/vendor/login/")
+    
+    
+# Vendor Add Product page
+@vendorobj.route("/add/products/")
+def vendor_add_products_page():
+    if session.get('rest_name')!=None and session.get("restaurant_id")!=None:
+        products_category=db.session.query(Category).all()
+        return render_template("addproduct.html", category=products_category)
+    else:
+        return redirect("/vendor/login/")
+    
+# Add products for big screens     
+@vendorobj.route('/submit/product/', methods=['POST'])
+def submit_product():
+    if session.get('rest_name')!=None and session.get("restaurant_id")!=None:
+        productName=request.form.get('productName')
+        productDesc=request.form.get('productDescription')
+        prodCategory=request.form.get('productCategory')
+        prodPrice=request.form.get('productPrice')
+        prodImage=request.files.get('productImage')
+        restaurant_id = session.get("restaurant_id")
+        allowed=['.jpeg','.jpg']
+        
+        if productName!=None and productDesc!=None and prodCategory!=None and prodPrice!=None and prodImage!=None:
+            
+            originalfilename=prodImage.filename
+            name,extension=os.path.splitext(originalfilename)
+            if extension in allowed:
+                originalfile = "foodapp/user/static/rest_prod_imgs/"+str(restaurant_id)+originalfilename
+                prodImage.save(originalfile)
+                
+                save_image_in_db=str(restaurant_id)+originalfilename
+                try:
+                    product_to_add=Product(prod_name=productName, prod_description=productDesc, prod_rest=restaurant_id, prod_cat=prodCategory, prod_price=prodPrice, prod_image=save_image_in_db)
+                        
+                    db.session.add(product_to_add)
+                    db.session.commit()
+                        
+                    return 'Product added successfully'
+                except:
+                    return 'Unable to add product. Please try again'
+            else:
+                return "Invalid picture format. Please upload a .jpg or .jpeg file."
+        else:
+            return "Ensure all the required values are supplied"
+    else:
+        return redirect("/vendor/login/")
+    
+    
+# Add products for small screens     
+@vendorobj.route('/product-submission/', methods=['POST'])
+def submit_product_small_screens():
+    if session.get('rest_name')!=None and session.get("restaurant_id")!=None:
+        productName=request.form.get('smallScreenProductName')
+        productDesc=request.form.get('smallScreenProductDesc')
+        prodCategory=request.form.get('smallScreenProductCategory')
+        prodPrice=request.form.get('smallScreenProductPrice')
+        prodImage=request.files.get('smallScreenProductImg')
+        restaurant_id = session.get("restaurant_id")
+        allowed=['.jpeg','.jpg']
+        
+        if productName!=None and productDesc!=None and prodCategory!=None and prodPrice!=None and prodImage!=None:
+            
+            originalfilename=prodImage.filename
+            name,extension=os.path.splitext(originalfilename)
+            if extension in allowed:
+                originalfile = "foodapp/user/static/rest_prod_imgs/"+str(restaurant_id)+originalfilename
+                prodImage.save(originalfile)
+                
+                save_image_in_db=str(restaurant_id)+originalfilename
+                try:
+                    product_to_add=Product(prod_name=productName, prod_description=productDesc, prod_rest=restaurant_id, prod_cat=prodCategory, prod_price=prodPrice, prod_image=save_image_in_db)
+                        
+                    db.session.add(product_to_add)
+                    db.session.commit()
+                        
+                    return 'Product added successfully'
+                except:
+                    return 'Unable to add product. Please try again'
+            else:
+                return "Invalid picture format. Please upload a .jpg or .jpeg file."
+        else:
+            return "Ensure all the required values are supplied"
+    else:
+        return redirect("/vendor/login/")

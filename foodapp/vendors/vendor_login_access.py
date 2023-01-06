@@ -18,16 +18,13 @@ def vendor_login_verify():
     
     if mail_address!="" and passkey!="":
         vendor_details=db.session.query(Restaurant).filter(Restaurant.rest_email==mail_address).first()
-        if vendor_details:
-            allowed_mail=vendor_details.rest_email
-            allowed_password=vendor_details.rest_pswd
-            if mail_address==allowed_mail and check_password_hash(allowed_password,passkey):
-                session['restaurant_id']=vendor_details.rest_id
-                session['rest_name']=vendor_details.rest_name
-                return redirect('/vendor/vendor-dashboard/')
-            else:
-                flash('Details Incorrect', category='WrongDetails')
-                return redirect("/vendor/login/")
+        if vendor_details and check_password_hash(vendor_details.rest_pswd, passkey):
+            
+            session['restaurant_id']=vendor_details.rest_id
+            session['rest_name']=vendor_details.rest_name
+            
+            return redirect('/vendor/vendor-dashboard/')
+        
         else:
             flash('Incorrect Credentials', category='WrongDetails')
             return redirect("/vendor/login/")
