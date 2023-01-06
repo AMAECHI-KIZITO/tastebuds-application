@@ -530,7 +530,7 @@ def category_selection(cat_id):
 # Mail testing
 @userobj.route('/mail/')
 def sendmail():
-    msg = Message("Confirm Email", sender=('Restaurant', 'ccmarketsgroup@gmail.com'), recipients=["konkakira1960@gmail.com"])
+    msg = Message("Confirm Email", sender=('Restaurant', 'konkakira1960@gmail.com'), recipients=["konkakira1960@gmail.com"])
     
     msg.body='This is me testing out the stuff again'
         

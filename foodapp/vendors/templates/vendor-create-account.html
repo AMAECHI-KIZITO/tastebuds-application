@@ -54,6 +54,9 @@
                     <img class="img-fluid img-thumbnail" src="{{url_for("bpvendor.static",filename="images/fine-dining2.jpg")}}">
                 </div>
                 <div class="col-md-6">
+                    <div class="py-3">
+                        <h2 class="text-center" style="font-family: 'lucida-calligraphy'; border-bottom: 1px solid black; color: #704e2e;">Create Your Vendor Account</h2>
+                    </div>
                     {%set notReg=get_flashed_messages(category_filter='bad_rest_reg')%}
                     {%for i in notReg%}
                         <div class="alert alert-danger">{{i}}</div>
@@ -63,9 +66,7 @@
                     {%for x in goodReg%}
                         <div class="alert alert-success">{{x}}</div>
                     {%endfor%}
-                    <div class="py-3">
-                        <h2 class="text-center" style="font-family: 'lucida-calligraphy'; border-bottom: 1px solid black; color: #704e2e;">Create Your Vendor Account</h2>
-                    </div>
+                    
 
                     <div id="new_rest_Feedback"></div>
 
@@ -78,10 +79,12 @@
                         <div class="col-12 mb-2">
                             <label for="restaurantPhone" class="form-label">Restaurant Phone</label>
                             <input type="text" class="form-control" name='restaurantPhone' id="restaurantPhone">
+                            <small id="phoneAvailabilityFeedback"></small>
                         </div>
                         <div class="col-12 mb-2">
                             <label for="restaurantEmail" class="form-label">Restaurant Email</label>
                             <input type="text" class="form-control" name='restaurantEmail' id="restaurantEmail">
+                            <small id="emailAvailabilityFeedback"></small>
                         </div>
                         <div class="col-12 mb-2">
                             <label for="restaurantAbout" class="form-label">Restaurant About</label>
@@ -100,6 +103,7 @@
                         </div>
                         <button type"button" class="btn text-light form-control" style='background-color:#704e2e'  id="btnRegRestaurant" onclick="register(event)">Register</button>
                     </form>
+                    <h6 class="text-center my-1" style="font-family: 'lucida-calligraphy'; color: #704e2e;">Have a vendor account? <a class='btn btn-sm text-light' href="/vendor/login/" style="text-decoration: none; background-color: #704e2e;"><b>Login</b></a></h6>
                 </div>
                 <div class="col-md-6 d-md-none d-flex">
                     <img class="img-fluid img-thumbnail" src="{{url_for("bpvendor.static",filename="images/fine-dining2.jpg")}}">
@@ -136,10 +140,10 @@
                                     <a class="d-block links" href='#'><i class="fa-brands fa-facebook-f text-primary"></i></a>
                                 </div>
                                 <div class="col-1">
-                                    <a class="d-block links" href='#'><i class='fa-brands fa-instagram' style='color:#8a3ab9;'></i></a>
+                                    <a class="d-block links" href='#'><i class='fa-brands fa-instagram' style='color:#CA5CDD;'></i></a>
                                 </div>
                                 <div class="col-1">
-                                    <a class="d-block links" href='#'><i class='fa-brands fa-whatsapp text-success'></i></a>
+                                    <a class="d-block links" href='#'><i class='fa-brands fa-whatsapp' style='color:#25d366;'></i></a>
                                 </div>
                             </div>
                         </div>
@@ -163,6 +167,80 @@
 
 
         {%block scripts%}
+            <script type='text/javascript'>
+                $(document).ready(function(){
+
+                    $('#restaurantPhone').change(function(){
+                        var Rphone = document.getElementById('restaurantPhone').value;
+
+                        $.ajax({
+                            url:"/vendor/check-phone-availability/",
+                            data:{"phoneNumber":Rphone},
+                            dataType:"text",
+                            type:"get",
+                            beforeSend:function(){},
+                            success:function(rsp){
+                                if(rsp=='Number Already Registered'){
+                                    if(document.getElementById('phoneAvailabilityFeedback').InnerHTML == ""){
+                                        $('#phoneAvailabilityFeedback').text(rsp);
+                                        $('#restaurantPhone').css("border","1px solid red");
+                                        $('#phoneAvailabilityFeedback').css("color","red");
+                                    }
+                                    $('#phoneAvailabilityFeedback').text(rsp);
+                                    $('#restaurantPhone').css("border","1px solid red");
+                                    $('#phoneAvailabilityFeedback').css("color","red");
+                                }
+                                else{
+                                    if(document.getElementById('phoneAvailabilityFeedback').InnerHTML == "Number Already Registered"){
+                                        $('#restaurantPhone').css("border","1px solid green");
+                                        $('#phoneAvailabilityFeedback').text('');
+                                    }
+                                    $('#restaurantPhone').css("border","1px solid green");
+                                    $('#phoneAvailabilityFeedback').text('');
+                                }
+                            },  
+                            error:function(msg){
+                                console.log(msg)
+                            }
+                        })
+                    })
+
+                    $('#restaurantEmail').change(function(){
+                        var Remail = document.getElementById('restaurantEmail').value;
+                        $.ajax({
+                            url:"/vendor/check-email-availability/",
+                            data:{"email":Remail},
+                            dataType:"text",
+                            type:"get",
+                            beforeSend:function(){},
+                            success:function(rsp){
+                                if(rsp=='Email Already Registered'){
+                                    if(document.getElementById('emailAvailabilityFeedback').InnerHTML == ""){
+                                        $('#emailAvailabilityFeedback').text(rsp);
+                                        $('#restaurantEmail').css("border","1px solid red");
+                                        $('#emailAvailabilityFeedback').css("color","red");
+                                    }
+                                    $('#emailAvailabilityFeedback').text(rsp);
+                                    $('#restaurantEmail').css("border","1px solid red");
+                                    $('#emailAvailabilityFeedback').css("color","red");
+                                }
+                                else{
+                                    if(document.getElementById('emailAvailabilityFeedback').InnerHTML == "Number Already Registered"){
+                                        $('#restaurantEmail').css("border","1px solid green");
+                                        $('#emailAvailabilityFeedback').text('');
+                                    }
+                                    $('#restaurantEmail').css("border","1px solid green");
+                                    $('#emailAvailabilityFeedback').text('');
+                                }
+                            },  
+                            error:function(msg){
+                                console.log(msg)
+                            }
+                        })
+                    })
+                })
+            </script>
+
             <script type='text/javascript'>
                 function register(e){
                     var image = document.getElementById('restaurantPic').value;

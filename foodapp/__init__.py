@@ -15,8 +15,8 @@ def create_app():
     from foodapp import config
     food.config['MAIL_SERVER'] = 'smtp.gmail.com'
     food.config['MAIL_PORT'] = 465
-    food.config['MAIL_USERNAME'] = 'ccmarketsgroup@gmail.com'
-    food.config['MAIL_PASSWORD'] = 'rewrscyzufbognjt'
+    food.config['MAIL_USERNAME'] = 'konkakira1960@gmail.com'
+    food.config['MAIL_PASSWORD'] = 'xicfwnrqibmeehov'
     food.config['MAIL_USE_SSL'] = True
     food.config['TESTING'] = False
     food.config['MAIL_SUPPRESS_SEND '] = False
