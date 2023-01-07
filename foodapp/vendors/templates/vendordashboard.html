@@ -90,7 +90,10 @@
                                     <a href="/vendor/generate-sales-history/" class="nav-link cust_dashboard_links">Generate Sales History</a>
                                 </li>
                                 <li class="nav-item navig mb-1">
-                                    <a href="/vendor/password-settings/" class="nav-link cust_dashboard_links">Password Settings</a>
+                                    <a href="/vendor/account-info/" class="nav-link cust_dashboard_links">Account Information</a>
+                                </li>
+                                <li class="nav-item navig mb-1">
+                                    <a href="/vendor/password-settings/" class="nav-link cust_dashboard_links">Change Your Password</a>
                                 </li>
                                 <li class="nav-item navig mb-1">
                                     <a href="/vendor/logout/" class="nav-link cust_dashboard_links">Logout</a>
@@ -193,7 +196,13 @@
         <script type="text/javascript" src="{{url_for('bpvendor.static',filename='DataTables/datatables.min.js')}}"></script>
         {%block scripts%}
         <script type='text/javascript'>
-            
+            $(document).ready(function(){
+                $('#bigScreenSettingsList').hide();
+
+                $('#bigScreenSettings').click(function(){
+                    $('#bigScreenSettingsList').toggle();
+                })
+            })
         </script>
         {%endblock scripts%}
         <script type="text/javascript" src="{{url_for('bpvendor.static',filename='js/bootstrap.bundle.js')}}"></script>
