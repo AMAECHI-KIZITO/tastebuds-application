@@ -118,10 +118,8 @@ def customer_change_password():
 @userobj.route('/pswd_change/',methods=['POST'])
 def pswd_change():
     if session.get('customer_id')!=None and session.get('customer_name')!=None:
-        # This is to retrieve current customer info
         Userdeets=db.session.query(Customer).filter(Customer.cust_id==session.get('customer_id')).first()
         
-        # This is to get the form data
         form_old_pswd=request.form.get("old_pswd")
         form_new_pswd=request.form.get("new_pswd")
         form_confirm_pswd=request.form.get("new_pswd_confirm")
@@ -151,10 +149,8 @@ def pswd_change():
 @userobj.route('/smallscreens_pswd_change/',methods=['POST'])
 def smallscreens_pswd_change():
     if session.get('customer_id')!=None and session.get('customer_name')!=None:
-        # This is to retrieve current admin info
         Userdeets=db.session.query(Customer).filter(Customer.cust_id==session.get('customer_id')).first()
         
-        # This is to get the form data
         form_old_pswd=request.form.get("smallscreen_old_pswd")
         form_new_pswd=request.form.get("smallscreen_new_pswd")
         form_confirm_pswd=request.form.get("smallscreen_new_pswd_confirm")

@@ -24,6 +24,8 @@ class Restaurant(db.Model):
     rest_img=db.Column(db.String(80), nullable=False)
     rest_pswd=db.Column(db.String(200),nullable=False)
     account_number = db.Column(db.String(10), nullable=True)
+    account_bank = db.Column(db.Integer(), db.ForeignKey('banks.bank_id'))
+    account_name = db.Column(db.String(255), nullable=True)
     verify_account = db.Column(db.Enum("True","False"), nullable=False, default='False')
     rest_reg_date=db.Column(db.Date(), nullable=False, default=date.today())
     
@@ -96,7 +98,14 @@ class Payment(db.Model):
     pay_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     pay_orderid =db.Column(db.Integer(), db.ForeignKey('order.order_id'))#FK
     pay_amt=db.Column(db.Float(), nullable=False)
-    pay_ref=db.Column(db.String(30), nullable=False, unique=True)
-    pay_date=db.Column(db.DateTime(), default=datetime.now())
-    pay_status=db.Column(db.Enum('Paid', 'Pending', 'Failed'), nullable=True, default='Pending')
-    pay_feedback=db.Column(db.Text(), nullable=True)
+    pay_ref = db.Column(db.String(30), nullable=False, unique=True)
+    pay_date = db.Column(db.DateTime(), default=datetime.now())
+    pay_status = db.Column(db.Enum('Paid', 'Pending', 'Failed'), nullable=True, default='Pending')
+    pay_feedback = db.Column(db.Text(), nullable=True)
+    
+    
+class Banks(db.Model):
+    bank_id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    fwave_bank_id= db.Column(db.Integer(), nullable=False, unique=True)
+    bank_code = db.Column(db.String(10), nullable=False, unique=True)
+    bank_name = db.Column(db.String(50), nullable=False)

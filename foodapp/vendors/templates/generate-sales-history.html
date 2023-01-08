@@ -1,0 +1,221 @@
+{% extends "vendordashboard.html" %}
+
+{% block title %} Generate Sales History {% endblock title%}
+
+
+{% block style %}
+
+{% endblock style %}
+
+
+
+{%block content%}
+<div class="col-md-9">
+    <div class='row'>
+        <h2>Products Performance</h2><hr>
+        <p>
+            <button id='viewRevenueChart' class='btn btn-sm' style='background-color:#002a32; color:#ffffff'>See Revenue</button>
+            <button id='viewSalesChart' class='btn btn-sm' style='background-color:#002a32; color:#ffffff'>See Sales</button>
+        </p>
+    </div>
+
+    <div class='row' id='sales'>
+        <div class="col">
+            <canvas id='myChart'></canvas>
+        </div>
+    </div>
+
+    <div class='row' id='revenue'>
+        <div class="col">
+            <canvas id='myRevenueChart'></canvas>
+        </div>
+    </div>
+</div>
+{%endblock content%}
+
+
+
+
+
+
+
+{%block content2%}
+<!--Small screens-->
+<div class="row d-md-none" style='background-color:#FFF4C2;'>
+    <div class='col-12 mt-1'>
+        <h2>Products Performance</h2><hr>
+        <p>
+            <button id='viewPhoneRevenueChart' class='btn btn-sm' style='background-color:#002a32; color:#ffffff'>See Revenue</button>
+            <button id='viewPhoneSalesChart' class='btn btn-sm' style='background-color:#002a32; color:#ffffff'>See Sales</button>
+        </p>
+    </div>
+
+
+    <div class='row' id='phoneSales'>
+        <div class="col">
+            <canvas id='myPhoneSalesChart' style='height:500px; width:100%'></canvas>
+        </div>
+    </div>
+
+    <div class='row' id='phoneRevenue'>
+        <div class="col">
+            <canvas id='myPhoneRevenueChart' style='height:500px; width:100%'></canvas>
+        </div>
+    </div>
+</div>
+{%endblock content2%}
+
+
+{%block scripts%}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#revenue').hide();
+        $('#viewSalesChart').hide();
+
+        
+
+        $('#viewRevenueChart').click(function(){
+            $('#revenue').toggle();
+            $('#sales').toggle();
+            $('#viewSalesChart').toggle();
+            $('#viewRevenueChart').toggle();
+        });
+
+        $('#viewSalesChart').click(function(){
+            $('#revenue').toggle();
+            $('#sales').toggle();
+            $('#viewSalesChart').toggle();
+            $('#viewRevenueChart').toggle();
+        });
+
+        // Small screens chart layout
+        $('#phoneRevenue').hide();
+        $('#viewPhoneSalesChart').hide();
+
+        $('#viewPhoneRevenueChart').click(function(){
+            $('#phoneRevenue').toggle();
+            $('#phoneSales').toggle();
+            $('#viewPhoneSalesChart').toggle();
+            $('#viewPhoneRevenueChart').toggle();
+        });
+
+        $('#viewPhoneSalesChart').click(function(){
+            $('#phoneRevenue').toggle();
+            $('#phoneSales').toggle();
+            $('#viewPhoneSalesChart').toggle();
+            $('#viewPhoneRevenueChart').toggle();
+        });
+    })
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script type="text/javascript">
+    const ctx = document.getElementById("myChart").getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            
+            labels: {{vendor_goods | safe}},
+
+            datasets: [{
+                label: 'PRODUCTS SALES PERFORMANCE (Qty sold)',
+                
+                data: {{product_sales | safe}},
+                borderWidth: 2,
+                borderColor: "#002a32"
+            }],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+            },
+        },
+    })
+</script>
+
+
+<script type="text/javascript">
+    const revenueCtx = document.getElementById("myRevenueChart").getContext('2d');
+    new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            
+            labels: {{vendor_goods | safe}},
+
+            datasets: [{
+                label: 'PRODUCTS REVENUE (Naira)',
+                
+                data: {{income | safe}},
+                borderWidth: 2,
+                borderColor: "#002a32"
+            }],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+            },
+        },
+    })
+</script>
+
+<script type="text/javascript">
+    const phoneCtx = document.getElementById("myPhoneSalesChart").getContext('2d');
+    new Chart(phoneCtx, {
+        type: 'line',
+        data: {
+            
+            labels: {{vendor_goods | safe}},
+
+            datasets: [{
+                label: 'SALES PERFORMANCE (Qty sold)',
+                
+                data: {{product_sales | safe}},
+                borderWidth: 2,
+                borderColor: "#002a32"
+            }],
+        },
+        options: {
+            responsive: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+            },
+        },
+    })
+</script>
+
+
+<script type="text/javascript">
+    const phoneRevenueChart = document.getElementById("myPhoneRevenueChart").getContext('2d');
+    new Chart(phoneRevenueChart, {
+        type: 'line',
+        data: {
+            
+            labels: {{vendor_goods | safe}},
+
+            datasets: [{
+                label: 'PRODUCTS REVENUE (Naira)',
+                
+                data: {{income | safe}},
+                borderWidth: 2,
+                borderColor: "#002a32"
+            }],
+        },
+        options: {
+            responsive: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                },
+            },
+        },
+    })
+</script>
+{%endblock scripts%}

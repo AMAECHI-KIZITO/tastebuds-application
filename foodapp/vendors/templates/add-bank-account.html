@@ -1,0 +1,244 @@
+{% extends "vendordashboard.html" %}
+
+{% block title %} Add Bank Account {% endblock title%}
+
+
+{% block style %}
+
+{% endblock style %}
+
+
+
+{%block content%}
+<div class="col-md-9">
+    <div class='row'>
+        <div class="col-6">
+            <h2>Add Bank Account</h2><hr>
+            <small>Ensure that you provide the right account details. We would not be held liable for your mistake.</small>
+            <p id="feedback"></p>
+
+            <form id='vendorAddBankAccount'>
+                <div class="mb-3">
+                    <label for='accountNum' class='form-label'><b>Account Number</b></label>
+                    <input type='text' class='form-control' name='accountNum' id='accountNum' required>
+                    <p id='accountNumFeedback' style='font-size:13px; color:red'></p>
+                </div>
+                <div class="mb-3">
+                    <label for='accountName' class='form-label'><b>Account Name</b></label>
+                    <input type='text' class='form-control' name='accountName' id='accountName' required>
+                    <p id='accountNameFeedback' style='font-size:13px; color:red'></p>
+                </div>
+    
+                <div class="mb-3">
+                    <label for='bankChoice' class='form-label'><b>Select Bank</b></label>
+                    <select class="form-select" name='bankChoice' id="bankChoice">
+                        {% for bank in banks %}
+                            <option value='{{bank.bank_id}}'> {{bank.bank_name}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="mb-3">
+                    <input type='hidden' class='form-control' name='csrf_token' id='csrf_token' value='{{csrf_token()}}'>
+                </div>
+    
+                <div class="mb-3">
+                    <button type='button' id='btnAddAccount' class='btn form-control' style='background-color:#002a32; color:#ffffff'>Add Account</button>
+                </div>
+                <div class="mb-3 d-none">
+                    <button type='reset' id='btnAddAccountReset' class='btn btn-danger form-control'>Reset</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-6">
+            <h2>Current Bank Information</h2><hr>
+            {% if vendor_info.account_number == None%}
+            <p><strong>Account Number:</strong> Not Provided</p>
+            {% else %}
+            <p><strong>Account Number:</strong> {{vendor_info.account_number}}</p>
+            {% endif %}
+
+            {% if vendor_info.account_name == None%}
+            <p><strong>Account Name:</strong> Not Provided</p>
+            {% else %}
+            <p><strong>Account Name:</strong> {{vendor_info.account_name}}</p>
+            {% endif %}
+
+            {% if vendor_info.account_bank == None%}
+            <p><strong>Bank:</strong> Not Provided</p>
+            {% else %}
+            <p><strong>Bank:</strong> {{vendor_info.account_bank}}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{%endblock content%}
+
+
+
+
+
+
+
+{%block content2%}
+<!--Small screens-->
+<div class="row d-md-none" style='background-color:#FFF4C2;'>
+    <div class='col-12 mt-1'>
+        <h3>Current Bank Information</h3><hr>
+        {% if vendor_info.account_number == None%}
+        <p><strong>Account Number:</strong> Not Provided</p>
+        {% else %}
+        <p><strong>Account Number:</strong> {{vendor_info.account_number}}</p>
+        {% endif %}
+
+        {% if vendor_info.account_name == None%}
+        <p><strong>Account Name:</strong> Not Provided</p>
+        {% else %}
+        <p><strong>Account Name:</strong> {{vendor_info.account_name}}</p>
+        {% endif %}
+
+        {% if vendor_info.account_bank == None%}
+        <p><strong>Bank:</strong> Not Provided</p>
+        {% else %}
+        <p><strong>Bank:</strong> {{vendor_info.account_bank}}</p>
+        {% endif %}
+    </div><hr/>
+    <div class='col-12 mt-1'>
+        <h3>Add Bank Account</h3><hr>
+        <small>Ensure that you provide the right account details. We would not be held liable for your mistake.</small>
+        <p id="smallScreenFeedback"></p>
+
+        <form id='vendorAddBankAccountSmallScreen'>
+            <div class="mb-3">
+                <label for='accountNumSmallScreen' class='form-label'><b>Account Number</b></label>
+                <input type='text' class='form-control' name='accountNumSmallScreen' id='accountNumSmallScreen' required>
+                <p id='accountNumFeedbackSmallScreen' style='font-size:13px; color:red'></p>
+            </div>
+            <div class="mb-3">
+                <label for='accountNameSmallScreen' class='form-label'><b>Account Name</b></label>
+                <input type='text' class='form-control' name='accountNameSmallScreen' id='accountNameSmallScreen' required>
+                <p id='accountNameFeedbackSmallScreen' style='font-size:13px; color:red'></p>
+            </div>
+
+            <div class="mb-3">
+                <label for='bankChoiceSmallScreen' class='form-label'><b>Select Bank</b></label>
+                <select class="form-select" name='bankChoiceSmallScreen' id="bankChoiceSmallScreen">
+                    {% for bank in banks %}
+                        <option value='{{bank.bank_id}}'> {{bank.bank_name}} </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <input type='hidden' class='form-control' name='csrf_token' id='csrf_token' value='{{csrf_token()}}'>
+            </div>
+
+            <div class="mb-3">
+                <button type='button' id='btnAddAccountSmallScreen' class='btn form-control' style='background-color:#002a32; color:#ffffff'>Add Account</button>
+            </div>
+            <div class="mb-3 d-none">
+                <button type='reset' id='btnAddAccountResetSmallScreen' class='btn btn-danger form-control'>Reset</button>
+            </div>
+        </form>
+    </div>
+</div>
+{%endblock content2%}
+
+
+{%block scripts%}
+<script type="text/javascript">
+
+//Password Change
+$('#btnChangePassword').click(function(){
+    var form = document.getElementById('vendor_password_change')
+    var formdata= new FormData(form)
+    $.ajax({
+        url:"/vendor/pswd_change/",
+            data:formdata,
+            dataType:"text",
+            type:"post",
+            cache:false,
+            processData:false,
+            contentType:false,
+            beforeSend:function(){
+                if($('#old_pswd').val()==""){
+                    $('#old_pswd').css('border','1px solid red');
+                    $('#oldpasskey').text("This field is required");
+                }
+                if($('#new_pswd').val()==""){
+                    $('#new_pswd').css('border','1px solid red');
+                    $('#newpasskey').text("This field is required");
+                }
+                if($('#new_pswd_confirm').val()==""){
+                    $('#new_pswd_confirm').css('border','1px solid red');
+                    $('#confirmnewpasskey').text("This field is required");
+                }
+            },
+            success:function(rsp){
+                if(rsp=="Password Successfully Changed"){
+                    $('#feedback').removeClass('alert alert-danger');
+                    $('#feedback').addClass('alert alert-success');
+                    $('#feedback').html(rsp);
+                    $('#btnChangePasswordReset').click();
+                }
+                else{
+                    $('#feedback').removeClass('alert alert-success');
+                    $('#feedback').addClass('alert alert-danger');
+                    $('#feedback').html(rsp);
+                }
+            },  
+            error:function(msg){
+                console.log(msg)
+            }
+    })
+})
+
+
+
+
+
+$('#btnSmallScreenChangePassword').click(function(){
+    var form = document.getElementById('small_screens_vendor_password_change')
+    var formdata= new FormData(form)
+    $.ajax({
+        url:"/vendor/smallscreens_pswd_change/",
+            data:formdata,
+            dataType:"text",
+            type:"post",
+            cache:false,
+            processData:false,
+            contentType:false,
+            beforeSend:function(){
+                if($('#smallscreen_old_pswd').val()==""){
+                    $('#smallscreen_old_pswd').css('border','1px solid red');
+                    $('#smallscreen_oldpasskey').text("This field is required");
+                }
+                if($('#smallscreen_new_pswd').val()==""){
+                    $('#smallscreen_new_pswd').css('border','1px solid red');
+                    $('#smallscreen_newpasskey').text("This field is required");
+                }
+                if($('#smallscreen_new_pswd_confirm').val()==""){
+                    $('#smallscreen_new_pswd_confirm').css('border','1px solid red');
+                    $('#smallscreen_confirmnewpasskey').text("This field is required");
+                }
+            },
+            success:function(rsp){
+                if(rsp=="Password Successfully Changed"){
+                    $('#smallScreenFeedback').removeClass('alert alert-danger');
+                    $('#smallScreenFeedback').addClass('alert alert-success');
+                    $('#smallScreenFeedback').html(rsp);
+                    $('#btnSmallScreensChangePasswordReset').click();
+                }
+                else{
+                    $('#smallScreenFeedback').removeClass('alert alert-success');
+                    $('#smallScreenFeedback').addClass('alert alert-danger');
+                    $('#smallScreenFeedback').html(rsp);
+                }
+            },  
+            error:function(msg){
+                console.log(msg)
+            }
+    })
+})
+</script>
+{%endblock scripts%}
