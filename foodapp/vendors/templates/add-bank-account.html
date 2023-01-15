@@ -23,21 +23,24 @@
                     <input type='text' class='form-control' name='accountNum' id='accountNum' required>
                     <p id='accountNumFeedback' style='font-size:13px; color:red'></p>
                 </div>
-                <div class="mb-3">
-                    <label for='accountName' class='form-label'><b>Account Name</b></label>
-                    <input type='text' class='form-control' name='accountName' id='accountName' required>
-                    <p id='accountNameFeedback' style='font-size:13px; color:red'></p>
-                </div>
+                
     
                 <div class="mb-3">
                     <label for='bankChoice' class='form-label'><b>Select Bank</b></label>
                     <select class="form-select" name='bankChoice' id="bankChoice">
                         {% for bank in banks %}
-                            <option value='{{bank.bank_id}}'> {{bank.bank_name}} </option>
+                            <option value='{{bank.bank_code}}'> {{bank.bank_name}} </option>
                         {% endfor %}
                     </select>
                 </div>
-    
+                
+                <div class="mb-3">
+                    <label for='accountName' class='form-label'><b>Account Name</b></label>
+                    <input type='text' class='form-control' name='accountName' id='accountName' readonly>
+                    <p id='accountNameFeedback' style='font-size:13px; color:red'></p>
+                </div>
+
+
                 <div class="mb-3">
                     <input type='hidden' class='form-control' name='csrf_token' id='csrf_token' value='{{csrf_token()}}'>
                 </div>
@@ -116,7 +119,7 @@
             </div>
             <div class="mb-3">
                 <label for='accountNameSmallScreen' class='form-label'><b>Account Name</b></label>
-                <input type='text' class='form-control' name='accountNameSmallScreen' id='accountNameSmallScreen' required>
+                <input type='text' class='form-control' name='accountNameSmallScreen' id='accountNameSmallScreen' readonly>
                 <p id='accountNameFeedbackSmallScreen' style='font-size:13px; color:red'></p>
             </div>
 
@@ -147,98 +150,48 @@
 
 {%block scripts%}
 <script type="text/javascript">
+    // Verify Account number
+    $('#btnAddAccount').click(function(){
+        var account = document.getElementById('accountNum').value;
+        var bank = document.getElementById('bankChoice').value;
 
-//Password Change
-$('#btnChangePassword').click(function(){
-    var form = document.getElementById('vendor_password_change')
-    var formdata= new FormData(form)
-    $.ajax({
-        url:"/vendor/pswd_change/",
-            data:formdata,
+        $.ajax({
+            url:"/vendor/validate-account-number/",
+            data:{"account":account, "bank":bank},
             dataType:"text",
-            type:"post",
-            cache:false,
-            processData:false,
-            contentType:false,
+            type:"get",
             beforeSend:function(){
-                if($('#old_pswd').val()==""){
-                    $('#old_pswd').css('border','1px solid red');
-                    $('#oldpasskey').text("This field is required");
-                }
-                if($('#new_pswd').val()==""){
-                    $('#new_pswd').css('border','1px solid red');
-                    $('#newpasskey').text("This field is required");
-                }
-                if($('#new_pswd_confirm').val()==""){
-                    $('#new_pswd_confirm').css('border','1px solid red');
-                    $('#confirmnewpasskey').text("This field is required");
+                if(!account || !bank){
+                    alert('Fill out all fields');
+                    return false
                 }
             },
             success:function(rsp){
-                if(rsp=="Password Successfully Changed"){
-                    $('#feedback').removeClass('alert alert-danger');
-                    $('#feedback').addClass('alert alert-success');
-                    $('#feedback').html(rsp);
-                    $('#btnChangePasswordReset').click();
-                }
-                else{
-                    $('#feedback').removeClass('alert alert-success');
-                    $('#feedback').addClass('alert alert-danger');
-                    $('#feedback').html(rsp);
-                }
+                {#if(rsp=='Number Already Registered'){
+                    if(document.getElementById('phoneAvailabilityFeedback').InnerHTML == ""){
+                        $('#phoneAvailabilityFeedback').text(rsp);
+                        $('#restaurantPhone').css("border","1px solid red");
+                        $('#phoneAvailabilityFeedback').css("color","red");
+                    }
+                    $('#phoneAvailabilityFeedback').text(rsp);
+                    $('#restaurantPhone').css("border","1px solid red");
+                    $('#phoneAvailabilityFeedback').css("color","red");
+                }#}
+                {#else{
+                    if(document.getElementById('phoneAvailabilityFeedback').InnerHTML == "Number Already Registered"){
+                        $('#restaurantPhone').css("border","1px solid green");
+                        $('#phoneAvailabilityFeedback').text('');
+                    }
+                    $('#restaurantPhone').css("border","1px solid green");
+                    $('#phoneAvailabilityFeedback').text('');
+                }#}
+                alert(rsp)
             },  
             error:function(msg){
                 console.log(msg)
             }
+        })
     })
-})
 
-
-
-
-
-$('#btnSmallScreenChangePassword').click(function(){
-    var form = document.getElementById('small_screens_vendor_password_change')
-    var formdata= new FormData(form)
-    $.ajax({
-        url:"/vendor/smallscreens_pswd_change/",
-            data:formdata,
-            dataType:"text",
-            type:"post",
-            cache:false,
-            processData:false,
-            contentType:false,
-            beforeSend:function(){
-                if($('#smallscreen_old_pswd').val()==""){
-                    $('#smallscreen_old_pswd').css('border','1px solid red');
-                    $('#smallscreen_oldpasskey').text("This field is required");
-                }
-                if($('#smallscreen_new_pswd').val()==""){
-                    $('#smallscreen_new_pswd').css('border','1px solid red');
-                    $('#smallscreen_newpasskey').text("This field is required");
-                }
-                if($('#smallscreen_new_pswd_confirm').val()==""){
-                    $('#smallscreen_new_pswd_confirm').css('border','1px solid red');
-                    $('#smallscreen_confirmnewpasskey').text("This field is required");
-                }
-            },
-            success:function(rsp){
-                if(rsp=="Password Successfully Changed"){
-                    $('#smallScreenFeedback').removeClass('alert alert-danger');
-                    $('#smallScreenFeedback').addClass('alert alert-success');
-                    $('#smallScreenFeedback').html(rsp);
-                    $('#btnSmallScreensChangePasswordReset').click();
-                }
-                else{
-                    $('#smallScreenFeedback').removeClass('alert alert-success');
-                    $('#smallScreenFeedback').addClass('alert alert-danger');
-                    $('#smallScreenFeedback').html(rsp);
-                }
-            },  
-            error:function(msg){
-                console.log(msg)
-            }
-    })
-})
 </script>
 {%endblock scripts%}
