@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'>
     <head>
-        <title>{%block title%}TasteBuds | Home{%endblock%}</title>
+        <title>{%block title%}TasteBuds - Home{%endblock%}</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="author" content="Amaechi Tochukwu">
@@ -62,8 +62,13 @@
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-1">
                     <div class="container-fluid">
                         <a class="navbar-brand brandname" href="/user/" style="font-family:'lucida-calligraphy'; color: #FFF4C2;"><h3 id='theBrand'>TasteBuds</h3></a>
-                        <button class=" btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+
+                        <button class=" btn navbar-toggler d-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <button class="btn btn-outline-warning d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasStart" aria-controls="offcanvasStart">
+                            <i class="fa-solid fa-bars" style="color: #FFF4C2;"></i>
                         </button>
                         
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -74,20 +79,26 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" href="#" style="color: #FFF4C2;"><b>Contact Us</b></a>
                                 </li>
-                                <li class="nav-item">
+                                {#<li class="nav-item">
                                     <a class="nav-link active" href="/admin/login/" style="color: #FFF4C2;"><b>Admin</b></a>
-                                </li>
+                                </li>#}
                                 {%if session.get('customer_name')!=None and session.get('customer_id')!=None%}
                                 <li class="nav-item">
                                     <a class="nav-link active" href="/user/myaccount/" style="color: #FFF4C2;"><b>Track Orders</b></a>
                                 </li>
                                 {% endif %}
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link active dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #FFF4C2;"><b>Categories</b>
+                                    <a class="nav-link active dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #FFF4C2;">
+                                        <b>Categories</b>
                                     </a>
+
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #FFF4C2;">
                                         {% for cat in category%}
-                                        <li><a class="dropdown-item" href="/user/category/{{cat.cat_id}}">{{cat.cat_name}}</a></li>
+                                        <li>
+                                            <a class="dropdown-item" href="/user/category/{{cat.cat_id}}">
+                                                {{cat.cat_name}}
+                                            </a>
+                                        </li>
                                         {% endfor %}
                                     </ul>
                                 </li>
@@ -201,7 +212,83 @@
             </div>
             {%endblock footer%}
         </div>
-        
+
+
+        <!-- Off canvas-->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart" aria-labelledby="offcanvasStartLabel" style="color:orange; background-color:#1B1B1B">
+            <div class="offcanvas-header">
+                <h3 style="color: #FFF4C2;">TasteBuds</h3>
+                <button type="button" class="btn-close text-reset btn-outline-warning" data-bs-dismiss="offcanvas" aria-label="Close" style="background-color:#FFF4C2"></button>
+            </div>
+            <div class="offcanvas-body">
+                
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <p class="text-center">
+                                    <a class="nav-link active" aria-current="page" href="/user/" style="color: #FFF4C2;">
+                                        <b>Home</b>
+                                    </a>
+                                </p>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <p class="text-center">
+                                    <a style="color: #FFF4C2;">
+                                        <b>Categories</b>
+                                    </a>
+                                </p>
+                            </li>
+
+                            <li class="nav-item">
+                                <p class="text-center">
+                                    <a class="nav-link active" href="#" style="color: #FFF4C2;">
+                                        <b>Contact Us</b>
+                                    </a>
+                                </p>
+                            </li>
+                                    
+                            {%if session.get('customer_name')!=None and session.get('customer_id')!=None%}
+                            <li class="nav-item">
+                                <p class="text-center">
+                                    <a class="nav-link active" href="/user/myaccount/" style="color: #FFF4C2;">
+                                        <b>Track Orders</b>
+                                    </a>
+                                </p>
+                                <p class="text-center">
+                                    <a href='/user/logout/' class="d-block links">
+                                        <b>Logout</b>
+                                    </a>
+                                </p>
+                            </li>
+                            {% endif %}
+                                    
+                        </ul>
+                    </div>
+                    <div class="col-6 offset-6">
+                        {%if session.get('customer_name')==None and session.get('customer_id')==None%}
+                            <a href='/user/login/' class="ms-2 float-end">
+                                <i class="fa-solid fa-user pe-2"></i>
+                            </a>
+                        {%else%}
+                            <a style="color:#FFF4C2; text-decoration:none; font-size:12px" class="float-end">
+                                Hi, {{session.get('customer_name')}}
+                            </a>
+                        {%endif%}
+
+                        <button type="button" id="shopcart" class="btn btn-sm float-end" data-bs-toggle="modal" data-bs-target="#orderPlaced" style="position: relative; background-color:#FFF4C2">
+
+                            <i class="fa-solid fa-cart-shopping">
+                                {%if usercart!=0%}
+                                    <span class="badge bg-danger rounded-pill" id='items_in_cart' style="position: absolute; font-size: 10px">{{usercart}}</span>
+                                {%endif%}
+                            </i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         
 
